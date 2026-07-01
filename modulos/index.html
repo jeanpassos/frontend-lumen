@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulos — LUMEN · Grupo ITS CS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#183c5a;--navy2:#0f2942;--orange:#E85928;--blue:#2f6fed;--bg:#f0f2f5;--card:#fff;--border:#e3e7ec;--strong:#1f2937;--text:#374151;--muted:#6b7280;--muted2:#9aa6b4}
+  *{box-sizing:border-box}html,body{margin:0}
+  body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit}.mono{font-family:'JetBrains Mono',monospace}
+  .top{background:radial-gradient(1000px 420px at 12% -20%,rgba(46,111,237,.18),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy2));color:#eaf1f8;padding:26px 24px 96px;position:relative}
+  .top::after{content:"";position:absolute;inset:auto 0 -1px 0;height:76px;background:linear-gradient(to bottom,transparent,var(--bg))}
+  .wrap{max-width:1120px;margin:0 auto}
+  .crumbs{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#9db4cc;margin-bottom:20px}
+  .crumbs a{color:#c6d5e6;font-weight:600}.crumbs a:hover{color:#fff}
+  .top h1{margin:0 0 8px;font-size:clamp(25px,3.6vw,36px);letter-spacing:-.9px;font-weight:800;color:#fff}
+  .top p{margin:0;max-width:64ch;color:#c6d5e6;font-size:14.5px}
+  .stage{max-width:1120px;margin:-66px auto 0;padding:0 24px 72px;position:relative;z-index:2}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+  .card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(16,30,45,.04),0 10px 26px rgba(16,30,45,.07);transition:transform .18s,box-shadow .18s,border-color .18s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(16,30,45,.05),0 20px 44px rgba(16,30,45,.14);border-color:#d3dbe4}
+  .thumb{aspect-ratio:16/9;overflow:hidden;background:#eef1f5;border-bottom:1px solid var(--border);position:relative}
+  .thumb img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;transition:transform .3s}
+  .card:hover .thumb img{transform:scale(1.03)}
+  .count{position:absolute;left:12px;bottom:12px;font-size:11px;font-weight:700;color:#fff;background:rgba(15,41,66,.82);backdrop-filter:blur(4px);padding:5px 10px;border-radius:20px}
+  .body{padding:16px 18px 18px}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+  .body h3{margin:0;font-size:17px;font-weight:700;color:var(--strong);letter-spacing:-.2px}
+  .seal{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:4px 9px;border-radius:20px;white-space:nowrap}
+  .seal.mod{background:#e9f1ff;color:var(--blue)}
+  .seal.src{background:#eef1f5;color:#475569}
+  .seal.soon{background:#fdf2e0;color:#b06a00}
+  .body p{margin:0;font-size:13px;color:var(--muted);line-height:1.5}
+  .go{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:13px;font-weight:600;color:var(--navy)}
+  .card:hover .go{color:var(--orange)}.card:hover .go svg{transform:translateX(3px)}.go svg{transition:transform .18s}
+  .ph{display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;background:repeating-linear-gradient(45deg,#f4f6f9,#f4f6f9 12px,#eef1f5 12px,#eef1f5 24px);color:#aab4c2;border-bottom:1px solid var(--border)}
+  .card.dashed{border-style:dashed;box-shadow:none}
+  @media(max-width:520px){.top{padding:22px 18px 88px}.stage{padding:0 16px 56px}}
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div class="crumbs"><a href="../index.html">LUMEN</a> <span>›</span> <span>Módulos</span></div>
+      <h1>Módulos da plataforma</h1>
+      <p>Cada módulo é um container que se encaixa no LUMEN Core, com permissão e menu controlados pela plataforma. Abra um módulo para explorar suas telas.</p>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div class="grid">
+
+      <a class="card" href="sogi.html">
+        <div class="thumb">
+          <img src="img/sogi-projetos.png" alt="Módulo SOGI">
+          <span class="count">Contém 5 módulos</span>
+        </div>
+        <div class="body">
+          <div class="row"><h3>SOGI</h3><span class="seal mod">Módulo · Docker</span></div>
+          <p>Sistema Operacional de Gestão Interna. Container com os módulos migrados: Projetos, Chamados, Comunicação, Calendário e Gamificação.</p>
+          <span class="go">Ver módulos do SOGI <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+
+      <a class="card" href="https://github.com/jeanpassos/frontend-lumen/tree/main/modules/_template/frontend-module">
+        <div class="ph">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7l2 2h7v12a2 2 0 0 1-2 2H4z"/><path d="M9 13h6M12 10v6"/></svg>
+        </div>
+        <div class="body">
+          <div class="row"><h3>Template de módulo</h3><span class="seal src">Scaffold · fonte</span></div>
+          <p>Molde reutilizável (Next.js / TypeScript) com placeholders <span class="mono">{{moduleSlug}}</span> para criar novos módulos padronizados.</p>
+          <span class="go">Ver código-fonte <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+
+      <div class="card dashed">
+        <div class="ph">
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        </div>
+        <div class="body">
+          <div class="row"><h3>Novos módulos</h3><span class="seal soon">Em breve</span></div>
+          <p>Financeiro, Contratos, Documents, Licitações e outros módulos do Core entram aqui conforme forem publicados.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

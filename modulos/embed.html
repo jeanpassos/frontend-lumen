@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SOGI · módulo</title>
+<!-- Host de embed COMPLETO do SOGI (carrega todos os arquivos, inclui dashboard.jsx p/ HealthDot).
+     Mantido à mão em /modulos (o sync não mexe aqui). Aponta para os .jsx gerados em ../modules/sogi/app. -->
+<link rel="stylesheet" href="../modules/sogi/app/tokens.css" />
+<style>
+  html,body{height:100%;margin:0;background:var(--bg,#f1f5f9)}
+  #root{height:100%}
+  .mod-back{position:fixed;left:16px;bottom:16px;z-index:9999;display:inline-flex;align-items:center;gap:8px;
+    background:#183c5a;color:#fff;font:600 13px/1 Inter,system-ui,sans-serif;text-decoration:none;
+    padding:10px 14px;border-radius:22px;box-shadow:0 6px 20px rgba(16,30,45,.28)}
+  .mod-back:hover{background:#12314a}
+  .mod-loading{position:fixed;inset:0;display:grid;place-items:center;color:#64748b;font:500 14px Inter,system-ui,sans-serif}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+<script>window.SOGI_TOAST=function(){};window.SOGI_CTX=function(){};window.SOGI_NEW_TASK=function(){};window.SOGI_OPEN_TASK=function(){};window.SOGI_OPEN_MOBILE=function(){};window.SOGI_LOGOUT=function(){};window.SOGI_TOGGLE_THEME=function(){};</script>
+<script src="../modules/sogi/app/data.js"></script>
+<script src="../modules/sogi/app/data-extra.js"></script>
+<script src="../modules/sogi/app/data-extra2.js"></script>
+<script src="../modules/sogi/app/data-extra3.js"></script>
+</head>
+<body>
+<div id="root"><div class="mod-loading">Carregando módulo…</div></div>
+
+<!-- Ordem: tweaks/components/dashboard(HealthDot) antes das telas -->
+<script type="text/babel" src="../modules/sogi/app/tweaks-panel.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/components.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/dashboard.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/projetos.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/projeto-views.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/fluxograma.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/tarefas.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/chamados.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/comunicacao.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/calendario.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/gamificacao.jsx"></script>
+<script type="text/babel" src="../modules/sogi/app/feed.jsx"></script>
+
+<script type="text/babel">
+function EmbedApp(){
+  const params = new URLSearchParams(location.search);
+  const hash = (location.hash || '').replace(/^#/, '').replace(/^screen=/, '');
+  const screen = params.get('screen') || hash || 'comunicacao';
+  const [projectId, setProjectId] = React.useState(null);
+  const [taskOpen, setTaskOpen] = React.useState(false);
+  const [newTaskOpen, setNewTaskOpen] = React.useState(false);
+  React.useEffect(() => {
+    window.SOGI_NEW_TASK = () => setNewTaskOpen(true);
+    window.SOGI_OPEN_TASK = () => setTaskOpen(true);
+  }, []);
+  let content = null;
+  if (screen === 'comunicacao') content = <ChatScreen onNavigate={() => {}} />;
+  else if (screen === 'calendario') content = <CalendarScreen onOpenTask={() => setTaskOpen(true)} />;
+  else if (screen === 'gamificacao') content = <GamificationScreen />;
+  else if (screen === 'chamados') content = <TicketsScreen />;
+  else if (screen === 'projetos') content = projectId
+    ? <ProjectWorkspace projectId={projectId} onBack={() => setProjectId(null)} onOpenTask={() => setTaskOpen(true)} />
+    : <ProjectsScreen onOpenProject={(id) => setProjectId(id)} />;
+  else if (screen === 'feed') content = <FeedScreen onNavigate={() => {}} />;
+  else content = <div style={{padding:40,font:'500 15px Inter,system-ui',color:'#64748b'}}>Módulo "{screen}" não disponível neste embed.</div>;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', background: 'var(--bg)' }}>
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, minHeight: 0 }}>{content}</main>
+      {taskOpen && typeof TaskDrawer !== 'undefined' && <TaskDrawer onClose={() => setTaskOpen(false)} />}
+      {newTaskOpen && typeof NewTaskModal !== 'undefined' && <NewTaskModal onClose={() => setNewTaskOpen(false)} onCreate={(t) => { try { SOGI_DATA.myTasks.unshift(t); } catch (e) {} }} />}
+      {typeof ToastHost !== 'undefined' && <ToastHost />}
+      {typeof CtxMenuHost !== 'undefined' && <CtxMenuHost />}
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<EmbedApp />);
+</script>
+<a class="mod-back" href="sogi.html">← Módulos do SOGI</a>
+</body>
+</html>

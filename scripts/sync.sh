@@ -45,7 +45,10 @@ SRC="$TMP/ex"; mkdir -p "$SRC"
 unzip -q "$ZIP" -d "$SRC"
 SOGI_UP="$SRC/uploads/SOGI - Sistema Operacional de Gestão Interna"
 
-# 4) regenera SOMENTE as pastas derivadas do design (preserva index.html, README, .nojekyll, scripts, etc.)
+# 4) regenera SOMENTE as pastas derivadas do design.
+#    PRESERVA (feito à mão, NÃO listar aqui): index.html, README, .nojekyll, scripts/,
+#    e a pasta de navegação  modulos/  (galeria + embed do SOGI + imagens).
+#    Atenção: apagamos "modules" (apps do design), NUNCA "modulos" (camada de apresentação).
 log "reorganizando monorepo (core, modules, extras, docs)..."
 rm -rf "$ROOT/core" "$ROOT/modules" "$ROOT/extras" "$ROOT/docs"
 

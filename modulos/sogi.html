@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulo SOGI — módulos migrados · LUMEN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#183c5a;--navy2:#0f2942;--orange:#E85928;--blue:#2f6fed;--bg:#f0f2f5;--card:#fff;--border:#e3e7ec;--strong:#1f2937;--text:#374151;--muted:#6b7280;--muted2:#9aa6b4;--ok:#1f9d57;--ok-bg:#e6f6ed}
+  *{box-sizing:border-box}html,body{margin:0}
+  body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit}.mono{font-family:'JetBrains Mono',monospace}
+  .top{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#eaf1f8;padding:26px 24px 92px;position:relative}
+  .top::after{content:"";position:absolute;inset:auto 0 -1px 0;height:70px;background:linear-gradient(to bottom,transparent,var(--bg))}
+  .wrap{max-width:1120px;margin:0 auto}
+  .crumbs{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#9db4cc;margin-bottom:20px}
+  .crumbs a{color:#c6d5e6;font-weight:600}.crumbs a:hover{color:#fff}
+  .seal{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#cfe0f0;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);padding:5px 11px;border-radius:20px;margin-bottom:14px}
+  .top h1{margin:0 0 8px;font-size:clamp(24px,3.4vw,34px);letter-spacing:-.8px;font-weight:800;color:#fff}
+  .top p{margin:0;max-width:66ch;color:#c6d5e6;font-size:14.5px}
+  .stage{max-width:1120px;margin:-64px auto 0;padding:0 24px 72px;position:relative;z-index:2}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+  .card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(16,30,45,.04),0 10px 26px rgba(16,30,45,.07);transition:transform .18s,box-shadow .18s,border-color .18s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(16,30,45,.05),0 20px 44px rgba(16,30,45,.14);border-color:#d3dbe4}
+  .thumb{aspect-ratio:16/10;overflow:hidden;background:#eef1f5;border-bottom:1px solid var(--border)}
+  .thumb img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;transition:transform .3s}
+  .card:hover .thumb img{transform:scale(1.03)}
+  .body{padding:16px 18px 18px}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+  .body h3{margin:0;font-size:16.5px;font-weight:700;color:var(--strong);letter-spacing:-.2px}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:4px 9px;border-radius:20px;background:#e9f1ff;color:var(--blue);white-space:nowrap}
+  .body p{margin:0;font-size:13px;color:var(--muted);line-height:1.5}
+  .go{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:13px;font-weight:600;color:var(--navy)}
+  .card:hover .go{color:var(--orange)}.card:hover .go svg{transform:translateX(3px)}
+  .go svg{transition:transform .18s}
+  .note{margin:22px 2px 0;font-size:12.5px;color:var(--muted2)}
+  @media(max-width:520px){.top{padding:22px 18px 84px}.stage{padding:0 16px 56px}}
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div class="crumbs"><a href="../index.html">LUMEN</a> <span>›</span> <a href="index.html">Módulos</a> <span>›</span> <span>SOGI</span></div>
+      <div class="seal">◆ Módulo · Docker</div>
+      <h1>SOGI — Sistema Operacional de Gestão Interna</h1>
+      <p>O SOGI é um <b style="color:#fff">módulo container</b> encaixado no LUMEN Core. Para ele foram <b style="color:#fff">migrados</b> os módulos abaixo — cada um é uma capacidade própria do domínio SOGI. Clique para abrir cada módulo.</p>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div class="grid">
+
+      <a class="card" href="embed.html#projetos">
+        <div class="thumb"><img src="img/sogi-projetos.png" alt="Módulo Projetos do SOGI"></div>
+        <div class="body">
+          <div class="row"><h3>Projetos</h3><span class="tag">Migrado</span></div>
+          <p>Portfólio de projetos com status, progresso e prazos; workspace por projeto, tarefas e fluxograma.</p>
+          <span class="go">Abrir módulo <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+
+      <a class="card" href="embed.html#chamados">
+        <div class="thumb"><img src="img/sogi-chamados.png" alt="Módulo Chamados do SOGI"></div>
+        <div class="body">
+          <div class="row"><h3>Chamados</h3><span class="tag">Migrado</span></div>
+          <p>Service desk: fila de atendimento, indicadores de SLA, base de conhecimento e relatórios.</p>
+          <span class="go">Abrir módulo <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+
+      <a class="card" href="embed.html#comunicacao">
+        <div class="thumb"><img src="img/sogi-comunicacao.png" alt="Módulo Comunicação do SOGI"></div>
+        <div class="body">
+          <div class="row"><h3>Comunicação</h3><span class="tag">Migrado</span></div>
+          <p>Central de mensagens: caixa de entrada unificada, chat, e-mail e conversas por chamado.</p>
+          <span class="go">Abrir módulo <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+
+      <a class="card" href="embed.html#calendario">
+        <div class="thumb"><img src="img/sogi-calendario.png" alt="Módulo Calendário do SOGI"></div>
+        <div class="body">
+          <div class="row"><h3>Calendário</h3><span class="tag">Migrado</span></div>
+          <p>Agenda de eventos, reuniões, entregas e manutenções, com visão por mês e por tipo.</p>
+          <span class="go">Abrir módulo <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+
+      <a class="card" href="embed.html#gamificacao">
+        <div class="thumb"><img src="img/sogi-gamificacao.png" alt="Módulo Gamificação do SOGI"></div>
+        <div class="body">
+          <div class="row"><h3>Gamificação</h3><span class="tag">Migrado</span></div>
+          <p>Engajamento saudável da equipe: pontos por prazo, SLA, qualidade e colaboração; ranking.</p>
+          <span class="go">Abrir módulo <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+
+    </div>
+    <p class="note">Cada módulo abre a tela real do protótipo SOGI (React), servida diretamente no navegador.</p>
+  </main>
+</body>
+</html>

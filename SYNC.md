@@ -3,7 +3,9 @@
 Este repositório é um **espelho publicável** do projeto do Claude Design.
 A fonte da verdade é o **Claude Design** (web) — as pastas `core/`, `modules/`, `extras/` e `docs/` são **geradas** a partir dele. Não edite essas pastas à mão: edite no Claude Design e sincronize.
 
-Já são mantidos à mão (o sync **não** sobrescreve): `index.html` (landing), `README.md`, `.nojekyll`, `.gitignore`, `scripts/`, `sync.bat`.
+Já são mantidos à mão (o sync **não** sobrescreve): `index.html` (landing), `README.md`, `.nojekyll`, `.gitignore`, `scripts/`, `sync.bat` e a pasta **`modulos/`** (camada de apresentação: galeria de módulos, galeria do SOGI e o host de embed `embed.html`, que abre cada tela do SOGI via `#projetos`, `#chamados`, etc.).
+
+> ⚠️ Não confundir `modules/` (apps gerados do design — **regenerados** pelo sync) com `modulos/` (navegação feita à mão — **preservada**). O `embed.html` aponta para os `.jsx` em `../modules/sogi/app`, que continuam existindo após cada sync.
 
 ## Como publicar uma alteração (modo sob comando)
 
