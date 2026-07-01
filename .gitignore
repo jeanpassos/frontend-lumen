@@ -1,0 +1,21 @@
+# Dependencies / build (o template de módulo é código-fonte; ainda não há build aqui)
+node_modules/
+dist/
+build/
+.next/
+out/
+
+# Ambiente
+.env
+.env.local
+*.local
+
+# SO / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporários
+*.log
+*.tmp

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="image-slot.js"></script>
+</helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+
+  <section data-label="Capa" data-speaker-notes="Abertura: o LUMEN Core é a plataforma que unifica todos os sistemas da ITSCS. Foco da apresentação: o Core (a base), não os módulos isolados." style="display:flex;width:100%;height:100%;box-sizing:border-box;font-family:'Inter Tight',system-ui,sans-serif;background:#0f2e47;color:#fff">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 110px">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:40px"><span style="width:54px;height:54px;border-radius:14px;background:#E85928;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:28px">L</span><span style="font-family:'Sora',sans-serif;font-weight:700;font-size:26px;letter-spacing:-.5px">LUMEN Core</span></div>
+      <h1 style="margin:0;font-family:'Sora',sans-serif;font-weight:800;font-size:74px;line-height:1.05;letter-spacing:-2px">A plataforma que<br><span style="color:#E85928">unifica os sistemas</span><br>da ITSCS</h1>
+      <p style="margin:34px 0 0;font-size:25px;line-height:1.5;color:#acc4d8;max-width:20em">Uma base única de login, navegação, permissões e design — onde cada módulo da empresa se encaixa.</p>
+      <div style="margin-top:54px;font-size:18px;color:#7fa0bd;letter-spacing:.5px">ITSCS · Apresentação à Diretoria · Junho de 2026</div>
+    </div>
+    <div style="width:760px;flex-shrink:0;padding:90px 90px 90px 0;display:flex;align-items:center">
+      <img src="screenshots/01-deck.png" style="width:100%;height:100%;object-fit:cover;object-position:top left;border-radius:24px;display:block;box-shadow:0 20px 50px rgba(0,0,0,.3)" alt="Tela do LUMEN Core">
+    </div>
+  </section>
+
+  <section data-label="Por que o Core" data-speaker-notes="O problema: cada sistema nascia com padrões próprios. A solução: uma fundação comum que entrega o básico para todos." style="display:flex;width:100%;height:100%;box-sizing:border-box;font-family:'Inter Tight',system-ui,sans-serif;background:#fff;color:#374151">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 90px 0 110px">
+      <div style="font-family:'Sora',sans-serif;font-weight:700;color:#E85928;font-size:20px;letter-spacing:.5px;margin-bottom:18px">O DESAFIO</div>
+      <h2 style="margin:0;font-family:'Sora',sans-serif;font-weight:800;font-size:52px;line-height:1.1;letter-spacing:-1px;color:#13314a">Cada sistema reinventava o próprio padrão</h2>
+      <p style="margin:28px 0 0;font-size:24px;line-height:1.55;max-width:24em;color:#5b6675">Telas, menus, login e permissões divergentes em cada projeto — mais custo de manutenção, entregas mais lentas e segurança fragmentada.</p>
+      <div style="margin-top:40px;background:#fff7f3;border-left:5px solid #E85928;border-radius:0 14px 14px 0;padding:24px 28px;max-width:30em">
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:22px;color:#13314a;margin-bottom:6px">A resposta: o LUMEN Core</div>
+        <p style="margin:0;font-size:20px;line-height:1.5;color:#5b6675">Uma plataforma comum que entrega, de uma vez para todos os módulos, o que todo sistema precisa ter.</p>
+      </div>
+    </div>
+    <div style="width:680px;flex-shrink:0;padding:110px 90px 110px 0;display:flex;align-items:center">
+      <img src="screenshots/02-deck.png" style="width:100%;height:100%;object-fit:cover;object-position:top left;border-radius:20px;display:block;border:1px solid #e3e7ec;box-shadow:0 16px 40px rgba(16,30,45,.14)" alt="Usuários no LUMEN Core">
+    </div>
+  </section>
+
+  <section data-label="Arquitetura" data-speaker-notes="Três camadas: o Core (plataforma), os módulos (cada um um container Docker), e serviços externos de IA/workflow. O Core não contém regra de negócio." style="display:flex;flex-direction:column;width:100%;height:100%;box-sizing:border-box;font-family:'Inter Tight',system-ui,sans-serif;background:#f7f9fb;color:#374151;padding:90px 110px">
+    <div style="font-family:'Sora',sans-serif;font-weight:700;color:#E85928;font-size:20px;letter-spacing:.5px;margin-bottom:14px">COMO FUNCIONA</div>
+    <h2 style="margin:0 0 44px;font-family:'Sora',sans-serif;font-weight:800;font-size:48px;letter-spacing:-1px;color:#13314a">Arquitetura modular</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px">
+      <div style="background:#fff;border:1px solid #e3e7ec;border-radius:20px;padding:40px 36px;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:700;color:#183c5a;background:#e8eef4;align-self:flex-start;padding:6px 16px;border-radius:30px">Core · plataforma</span><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:30px;color:#13314a;margin:24px 0 12px">A base</div><p style="margin:0;font-size:20px;line-height:1.55;color:#5b6675">Acesso, segurança, multiempresa, navegação, auditoria e biblioteca de componentes.</p></div>
+      <div style="background:#fff;border:1px solid #e3e7ec;border-radius:20px;padding:40px 36px;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:700;color:#1f9d57;background:#e6f6ed;align-self:flex-start;padding:6px 16px;border-radius:30px">Módulo · Docker</span><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:30px;color:#13314a;margin:24px 0 12px">Os sistemas</div><p style="margin:0;font-size:20px;line-height:1.55;color:#5b6675">Cada domínio é um container próprio que exibe sua tela dentro do Core.</p></div>
+      <div style="background:#fff;border:1px solid #e3e7ec;border-radius:20px;padding:40px 36px;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:700;color:#b06a00;background:#fdf2e0;align-self:flex-start;padding:6px 16px;border-radius:30px">Serviço externo</span><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:30px;color:#13314a;margin:24px 0 12px">IA &amp; Workflow</div><p style="margin:0;font-size:20px;line-height:1.55;color:#5b6675">NEXUS e HERMES apoiam os módulos por evento — sem fazer parte do Core.</p></div>
+    </div>
+    <div style="flex:1;min-height:0;margin:30px 0 0;border-radius:18px;overflow:hidden;border:1px solid #e3e7ec;box-shadow:0 14px 36px rgba(16,30,45,.12)"><img src="screenshots/01-deck.png" style="width:100%;height:100%;object-fit:cover;object-position:top left;display:block" alt="Core na prática"></div><p style="margin:20px 0 0;font-size:18px;color:#8a97a6">Permissões <span style="font-family:monospace;color:#5b6675">modulo.recurso.acao</span> revalidadas no servidor · MFA nas ações críticas · isolamento por empresa.</p>
+  </section>
+
+  <section data-label="O que o Core entrega" data-speaker-notes="O que já está pronto na plataforma — o básico que todo módulo herda automaticamente." style="display:flex;flex-direction:column;width:100%;height:100%;box-sizing:border-box;font-family:'Inter Tight',system-ui,sans-serif;background:#fff;color:#374151;padding:90px 110px">
+    <div style="font-family:'Sora',sans-serif;font-weight:700;color:#E85928;font-size:20px;letter-spacing:.5px;margin-bottom:14px">A PLATAFORMA</div>
+    <h2 style="margin:0 0 44px;font-family:'Sora',sans-serif;font-weight:800;font-size:48px;letter-spacing:-1px;color:#13314a">O que o Core já entrega</h2>
+    <div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-content:start">
+      <div style="background:#fff;border:1px solid #e3e7ec;border-radius:18px;overflow:hidden;display:flex;flex-direction:column"><img src="screenshots/01-deck.png" style="width:100%;height:230px;object-fit:cover;object-position:top left;display:block" alt="Login e shell"><div style="padding:16px 22px"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:21px;color:#13314a">Login &amp; shell</div><p style="margin:5px 0 0;font-size:16px;line-height:1.4;color:#5b6675">Sidebar, topbar e seletor de empresa.</p></div></div>
+      <div style="background:#fff;border:1px solid #e3e7ec;border-radius:18px;overflow:hidden;display:flex;flex-direction:column"><img src="screenshots/01-feat.png" style="width:100%;height:230px;object-fit:cover;object-position:top left;display:block" alt="Níveis de acesso"><div style="padding:16px 22px"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:21px;color:#13314a">Níveis de acesso</div><p style="margin:5px 0 0;font-size:16px;line-height:1.4;color:#5b6675">RBAC por papel + MFA.</p></div></div>
+      <div style="background:#fff;border:1px solid #e3e7ec;border-radius:18px;overflow:hidden;display:flex;flex-direction:column"><img src="screenshots/02-feat.png" style="width:100%;height:230px;object-fit:cover;object-position:top left;display:block" alt="Usuários 360"><div style="padding:16px 22px"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:21px;color:#13314a">Usuários 360°</div><p style="margin:5px 0 0;font-size:16px;line-height:1.4;color:#5b6675">Cadastro, atuação e análise.</p></div></div>
+      <div style="background:#f7f9fb;border:1px solid #e3e7ec;border-radius:18px;padding:30px 28px"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:23px;color:#13314a">Navegação &amp; menu</div><p style="margin:10px 0 0;font-size:18px;line-height:1.5;color:#5b6675">Menu dinâmico por permissão.</p></div>
+      <div style="background:#f7f9fb;border:1px solid #e3e7ec;border-radius:18px;padding:30px 28px"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:23px;color:#13314a">Integrações</div><p style="margin:10px 0 0;font-size:18px;line-height:1.5;color:#5b6675">Docker, WhatsApp, e‑mail.</p></div>
+      <div style="background:#f7f9fb;border:1px solid #e3e7ec;border-radius:18px;padding:30px 28px"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:23px;color:#13314a">Saúde dos serviços</div><p style="margin:10px 0 0;font-size:18px;line-height:1.5;color:#5b6675">Monitoramento dos módulos.</p></div>
+      <div style="background:#f7f9fb;border:1px solid #e3e7ec;border-radius:18px;padding:30px 28px"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:23px;color:#13314a">Configurações</div><p style="margin:10px 0 0;font-size:18px;line-height:1.5;color:#5b6675">Login customizável + avisos.</p></div>
+      <div style="background:#f7f9fb;border:1px solid #e3e7ec;border-radius:18px;padding:30px 28px"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:23px;color:#13314a">@lumen/ui</div><p style="margin:10px 0 0;font-size:18px;line-height:1.5;color:#5b6675">Componentes-padrão prontos.</p></div>
+    </div>
+  </section>
+
+  <section data-label="Módulos do SOGI" data-speaker-notes="Reaproveitamos módulos maduros do antigo projeto SOGI — eles passam a rodar dentro do Core, com login, menu e permissões da plataforma. Aproveita o trabalho existente." style="display:flex;width:100%;height:100%;box-sizing:border-box;font-family:'Inter Tight',system-ui,sans-serif;background:#fff;color:#374151">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 80px 0 110px">
+      <div style="font-family:'Sora',sans-serif;font-weight:700;color:#E85928;font-size:20px;letter-spacing:.5px;margin-bottom:14px">REAPROVEITAMENTO</div>
+      <h2 style="margin:0 0 14px;font-family:'Sora',sans-serif;font-weight:800;font-size:46px;line-height:1.1;letter-spacing:-1px;color:#13314a">Módulos do antigo SOGI, agora no Core</h2>
+      <p style="margin:0 0 30px;font-size:21px;line-height:1.5;color:#5b6675;max-width:26em">Módulos prontos foram reaproveitados e padronizados — sem reescrever cada tela.</p>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:10px;height:10px;border-radius:50%;background:#E85928"></span><span style="font-size:22px;color:#374151"><strong style="color:#13314a">Clientes</strong> — projetos, Kanban, Gantt, Fluxograma, Workload</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:10px;height:10px;border-radius:50%;background:#E85928"></span><span style="font-size:22px;color:#374151"><strong style="color:#13314a">Comunicação</strong> — caixa unificada (chat, e‑mail, chamados)</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:10px;height:10px;border-radius:50%;background:#E85928"></span><span style="font-size:22px;color:#374151"><strong style="color:#13314a">Service Desk</strong> — filas, SLA e atendimento</span></div>
+        <div style="display:flex;align-items:center;gap:16px"><span style="width:10px;height:10px;border-radius:50%;background:#E85928"></span><span style="font-size:22px;color:#374151"><strong style="color:#13314a">Calendário</strong> &amp; <strong style="color:#13314a">Gamificação</strong></span></div>
+      </div>
+    </div>
+    <div style="width:720px;flex-shrink:0;padding:90px 90px 90px 0;display:flex;align-items:center">
+      <img src="screenshots/03-deck.png" style="width:100%;height:100%;object-fit:cover;object-position:top left;border-radius:20px;display:block;border:1px solid #e3e7ec;box-shadow:0 16px 40px rgba(16,30,45,.14)" alt="Módulo no LUMEN Core">
+    </div>
+  </section>
+
+  <section data-label="Roadmap" data-speaker-notes="Estamos no Core + design system (em andamento). As próximas etapas existem, mas os prazos serão definidos pela diretoria — por isso ficam em aberto." style="display:flex;flex-direction:column;width:100%;height:100%;box-sizing:border-box;font-family:'Inter Tight',system-ui,sans-serif;background:#0f2e47;color:#fff;padding:90px 110px">
+    <div style="font-family:'Sora',sans-serif;font-weight:700;color:#E85928;font-size:20px;letter-spacing:.5px;margin-bottom:14px">CAMINHO</div>
+    <h2 style="margin:0 0 48px;font-family:'Sora',sans-serif;font-weight:800;font-size:48px;letter-spacing:-1px;color:#fff">Onde estamos e o que vem</h2>
+    <div style="flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:stretch">
+      <div style="background:#15395a;border:2px solid #E85928;border-radius:20px;padding:34px 30px;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:700;color:#fff;background:#E85928;align-self:flex-start;padding:5px 14px;border-radius:30px">Em andamento</span><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:27px;margin:22px 0 10px">Core &amp; Design System</div><p style="margin:0;font-size:18px;line-height:1.5;color:#acc4d8">A plataforma, a segurança e a biblioteca de componentes.</p></div>
+      <div style="background:#13334f;border:1px solid #2a567a;border-radius:20px;padding:34px 30px;display:flex;flex-direction:column;opacity:.92"><span style="font-size:14px;font-weight:700;color:#9fc3df;background:#1c476b;align-self:flex-start;padding:5px 14px;border-radius:30px">Próxima etapa</span><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:27px;margin:22px 0 10px">Ligação com o backend</div><p style="margin:0;font-size:18px;line-height:1.5;color:#8fb0cc">APIs, RBAC no servidor, MFA e multiempresa reais.</p><div style="flex:1"></div><div style="font-size:15px;color:#5f87a8;font-style:italic">prazo a definir</div></div>
+      <div style="background:#13334f;border:1px solid #2a567a;border-radius:20px;padding:34px 30px;display:flex;flex-direction:column;opacity:.92"><span style="font-size:14px;font-weight:700;color:#9fc3df;background:#1c476b;align-self:flex-start;padding:5px 14px;border-radius:30px">Próxima etapa</span><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:27px;margin:22px 0 10px">Piloto controlado</div><p style="margin:0;font-size:18px;line-height:1.5;color:#8fb0cc">Operação assistida com área‑piloto e ajustes.</p><div style="flex:1"></div><div style="font-size:15px;color:#5f87a8;font-style:italic">prazo a definir</div></div>
+      <div style="background:#13334f;border:1px solid #2a567a;border-radius:20px;padding:34px 30px;display:flex;flex-direction:column;opacity:.92"><span style="font-size:14px;font-weight:700;color:#9fc3df;background:#1c476b;align-self:flex-start;padding:5px 14px;border-radius:30px">Próxima etapa</span><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:27px;margin:22px 0 10px">Go‑live ITSCS</div><p style="margin:0;font-size:18px;line-height:1.5;color:#8fb0cc">Liberação geral para a empresa.</p><div style="flex:1"></div><div style="font-size:15px;color:#5f87a8;font-style:italic">prazo a definir</div></div>
+    </div>
+  </section>
+
+  <section data-label="Benefícios" data-speaker-notes="O retorno para a empresa: menos retrabalho, segurança consistente, entregas mais rápidas e experiência única para o colaborador." style="display:flex;flex-direction:column;width:100%;height:100%;box-sizing:border-box;font-family:'Inter Tight',system-ui,sans-serif;background:#fff;color:#374151;padding:90px 110px">
+    <div style="font-family:'Sora',sans-serif;font-weight:700;color:#E85928;font-size:20px;letter-spacing:.5px;margin-bottom:14px">RETORNO</div>
+    <h2 style="margin:0 0 48px;font-family:'Sora',sans-serif;font-weight:800;font-size:48px;letter-spacing:-1px;color:#13314a">O que a ITSCS ganha</h2>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:26px">
+      <div style="background:#f7f9fb;border:1px solid #e3e7ec;border-radius:20px;padding:40px;display:flex;flex-direction:column;justify-content:center"><div style="font-family:'Sora',sans-serif;font-weight:800;font-size:30px;color:#E85928">Menos retrabalho</div><p style="margin:14px 0 0;font-size:21px;line-height:1.5;color:#5b6675">Cada novo sistema parte do Core — o básico já vem pronto.</p></div>
+      <div style="background:#f7f9fb;border:1px solid #e3e7ec;border-radius:20px;padding:40px;display:flex;flex-direction:column;justify-content:center"><div style="font-family:'Sora',sans-serif;font-weight:800;font-size:30px;color:#E85928">Segurança consistente</div><p style="margin:14px 0 0;font-size:21px;line-height:1.5;color:#5b6675">Um único modelo de acesso para todos os módulos.</p></div>
+      <div style="background:#f7f9fb;border:1px solid #e3e7ec;border-radius:20px;padding:40px;display:flex;flex-direction:column;justify-content:center"><div style="font-family:'Sora',sans-serif;font-weight:800;font-size:30px;color:#E85928">Entrega mais rápida</div><p style="margin:14px 0 0;font-size:21px;line-height:1.5;color:#5b6675">Times focam na regra de negócio, não na tela.</p></div>
+      <div style="background:#f7f9fb;border:1px solid #e3e7ec;border-radius:20px;padding:40px;display:flex;flex-direction:column;justify-content:center"><div style="font-family:'Sora',sans-serif;font-weight:800;font-size:30px;color:#E85928">Experiência única</div><p style="margin:14px 0 0;font-size:21px;line-height:1.5;color:#5b6675">O colaborador aprende uma vez e usa tudo.</p></div>
+    </div>
+  </section>
+
+  <section data-label="Fechamento" data-speaker-notes="Fechamento: o Core é a fundação do futuro tecnológico da ITSCS. Abrir para perguntas e definição de prazos." style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;box-sizing:border-box;font-family:'Inter Tight',system-ui,sans-serif;background:#0f2e47;color:#fff;text-align:center;padding:90px">
+    <span style="width:64px;height:64px;border-radius:16px;background:#E85928;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:34px;margin-bottom:30px">L</span>
+    <h2 style="margin:0;font-family:'Sora',sans-serif;font-weight:800;font-size:60px;letter-spacing:-1.5px;max-width:18em;line-height:1.1">Uma plataforma. Todos os sistemas.</h2>
+    <p style="margin:28px 0 0;font-size:26px;color:#acc4d8;max-width:24em;line-height:1.5">O LUMEN Core é a fundação do próximo passo tecnológico da ITSCS.</p>
+    <div style="margin-top:50px;font-size:18px;color:#7fa0bd;letter-spacing:.5px">Obrigado · ITSCS · 2026</div>
+  </section>
+
+</x-import>
+</x-dc>
+</body>
+</html>

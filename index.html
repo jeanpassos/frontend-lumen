@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUMEN · Plataforma Modular — Grupo ITS CS</title>
+<meta name="description" content="LUMEN Core — plataforma corporativa modular (Core + módulos). Protótipo de alta fidelidade.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#183c5a; --navy-2:#0f2942; --orange:#E85928; --blue:#2f6fed;
+    --bg:#f0f2f5; --card:#ffffff; --border:#e3e7ec; --border-2:#eef0f3;
+    --strong:#1f2937; --text:#374151; --muted:#6b7280; --muted-2:#9aa6b4;
+    --ok:#1f9d57; --ok-bg:#e6f6ed; --sh:0 1px 2px rgba(16,30,45,.04),0 8px 24px rgba(16,30,45,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+  a{color:inherit;text-decoration:none}
+
+  /* HERO */
+  .hero{background:radial-gradient(1200px 500px at 15% -10%,rgba(46,111,237,.18),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy-2));color:#eaf1f8;padding:64px 24px 120px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;inset:auto 0 -1px 0;height:120px;background:linear-gradient(to bottom,transparent,var(--bg))}
+  .wrap{max-width:1080px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+  .logo{width:38px;height:38px;border-radius:10px;background:var(--orange);display:grid;place-items:center;box-shadow:0 6px 18px rgba(232,89,40,.4)}
+  .logo svg{display:block}
+  .brand b{font-weight:800;font-size:19px;letter-spacing:-.3px;color:#fff}
+  .brand span{color:#9db4cc;font-size:12.5px;letter-spacing:.3px}
+  .hero h1{font-size:clamp(30px,5vw,50px);line-height:1.05;letter-spacing:-1.2px;font-weight:800;color:#fff;margin:0 0 16px;max-width:16ch}
+  .hero h1 em{font-style:normal;color:#ffb59b}
+  .hero p{font-size:clamp(15px,2vw,18px);color:#c6d5e6;max-width:60ch;margin:0 0 26px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);color:#dbe6f2}
+
+  /* GRID */
+  .stage{max-width:1080px;margin:-84px auto 0;padding:0 24px 80px;position:relative;z-index:2}
+  .sec-label{font-size:11.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--muted-2);margin:34px 4px 14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:12px;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  .card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(16,30,45,.05),0 18px 40px rgba(16,30,45,.12);border-color:#d3dbe4}
+  .card .top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none}
+  .ico.navy{background:#eaf0f6;color:var(--navy)}
+  .ico.blue{background:#e9f1ff;color:var(--blue)}
+  .ico.orange{background:#fdeee8;color:var(--orange)}
+  .ico.slate{background:#eef1f5;color:#475569}
+  .seal{font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .seal.core{background:#eaf0f6;color:var(--navy)}
+  .seal.mod{background:#e9f1ff;color:var(--blue)}
+  .seal.ext{background:#fdf2e0;color:#b06a00}
+  .seal.ref{background:#eef1f5;color:#475569}
+  .card h3{margin:2px 0 0;font-size:17px;font-weight:700;letter-spacing:-.3px;color:var(--strong)}
+  .card p{margin:0;font-size:13.5px;color:var(--muted);flex:1}
+  .card .go{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--navy);margin-top:2px}
+  .card:hover .go{color:var(--orange)}
+  .card .go svg{transition:transform .18s ease}
+  .card:hover .go svg{transform:translateX(3px)}
+  .card.disabled{opacity:1}
+  .card.disabled .go{color:var(--muted-2)}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border);background:#fff}
+  .foot{max-width:1080px;margin:0 auto;padding:26px 24px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+  .foot a{color:var(--navy);font-weight:600}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block;box-shadow:0 0 0 0 rgba(31,157,87,.5);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(31,157,87,.5)}70%{box-shadow:0 0 0 7px rgba(31,157,87,0)}100%{box-shadow:0 0 0 0 rgba(31,157,87,0)}}
+  @media(max-width:520px){.hero{padding:44px 20px 110px}.stage{padding:0 16px 60px}}
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="4.2" fill="#fff"/></svg></div>
+        <div>
+          <b>LUMEN</b><br>
+          <span>Plataforma Modular · Grupo ITS CS</span>
+        </div>
+      </div>
+      <h1>O <em>Core</em> da plataforma e seus módulos, num só lugar.</h1>
+      <p>Protótipo de alta fidelidade do LUMEN — o <em>shell</em> corporativo (identidade, RBAC granular, multiempresa, menu dirigido por estado) e os módulos que se encaixam nele como containers. Navegue pelas telas abaixo.</p>
+      <div class="chips">
+        <span class="chip">RBAC · modulo.recurso.acao</span>
+        <span class="chip">Multiempresa</span>
+        <span class="chip">Menu dirigido por estado</span>
+        <span class="chip">Módulos · Docker</span>
+        <span class="chip">Alta fidelidade</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div class="sec-label">Plataforma</div>
+    <div class="grid">
+      <a class="card" href="core/">
+        <div class="top">
+          <div class="ico navy"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+          <span class="seal core">Core · plataforma</span>
+        </div>
+        <h3>LUMEN Core</h3>
+        <p>O shell completo: login, sidebar, topbar, dashboard, contratos, usuários (ficha 360°), cadastros com mapa do Brasil, integrações, work management, navegação & menu, configurações.</p>
+        <span class="go">Abrir protótipo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+
+      <a class="card" href="core/apresentacao.html">
+        <div class="top">
+          <div class="ico orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20v14H2z"/><path d="M12 17v4M8 21h8"/></svg></div>
+          <span class="seal ref">Deck</span>
+        </div>
+        <h3>Apresentação</h3>
+        <p>Deck de apresentação do LUMEN Core — visão executiva das telas e da proposta, com capturas reais do produto.</p>
+        <span class="go">Ver apresentação <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+
+    <div class="sec-label">Módulos</div>
+    <div class="grid">
+      <a class="card" href="modules/sogi/">
+        <div class="top">
+          <div class="ico blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></svg></div>
+          <span class="seal mod">Módulo · Docker</span>
+        </div>
+        <h3>SOGI</h3>
+        <p>Sistema Operacional de Gestão Interna — módulo de referência encaixado no Core: dashboard, feed, chamados/SLA, projetos, calendário, comunicação, gamificação e mais.</p>
+        <span class="go">Abrir módulo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+
+      <a class="card" href="https://github.com/jeanpassos/frontend-lumen/tree/main/modules/_template/frontend-module">
+        <div class="top">
+          <div class="ico slate"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7l2 2h7v12a2 2 0 0 1-2 2H4z"/><path d="M9 13h6M12 10v6"/></svg></div>
+          <span class="seal ref">Scaffold · fonte</span>
+        </div>
+        <h3>Template de módulo</h3>
+        <p>Molde reutilizável (Next.js / TypeScript) com placeholders <span class="mono">{{moduleSlug}}</span> para criar novos módulos padronizados: page, components, hooks, lib, tests.</p>
+        <span class="go">Ver código-fonte <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+
+    <div class="sec-label">Referências &amp; documentação</div>
+    <div class="grid">
+      <a class="card" href="extras/matriz-composicao-dominio.html">
+        <div class="top">
+          <div class="ico slate"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+          <span class="seal ref">Referência</span>
+        </div>
+        <h3>Matriz de composição de domínio</h3>
+        <p>Mapa de como os domínios se compõem sobre o Core — referência conceitual da arquitetura modular.</p>
+        <span class="go">Abrir matriz <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+
+      <a class="card" href="extras/its-design-kit.html">
+        <div class="top">
+          <div class="ico orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 22a10 10 0 1 1 0-20c4 0 4 4 2 6s2 4 6 2"/></svg></div>
+          <span class="seal ref">UI Kit</span>
+        </div>
+        <h3>ITS Design Kit</h3>
+        <p>Kit de identidade visual do Grupo ITS CS usado como base para o LUMEN e o módulo SOGI.</p>
+        <span class="go">Abrir kit <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+
+      <a class="card" href="https://github.com/jeanpassos/frontend-lumen/tree/main/docs">
+        <div class="top">
+          <div class="ico navy"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <span class="seal ref">Handoff</span>
+        </div>
+        <h3>Documentação &amp; arquitetura</h3>
+        <p>Handoff completo: arquitetura Core modular (v0.3), design tokens, OpenAPI do Core, manifesto de módulo e convenções do projeto.</p>
+        <span class="go">Ver docs <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="foot">
+      <div><span class="dot"></span>&nbsp; Protótipo de alta fidelidade · gerado a partir do <b style="color:var(--strong)">Claude Design</b></div>
+      <div><a href="https://github.com/jeanpassos/frontend-lumen">github.com/jeanpassos/frontend-lumen</a></div>
+    </div>
+  </footer>
+</body>
+</html>

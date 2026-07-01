@@ -1,0 +1,371 @@
+# SOGI Core API — contrato OpenAPI inicial
+# Cada módulo é uma STACK TOTALMENTE SEPARADA (repo, deploy, banco/schema próprios).
+# Este arquivo é o ÚNICO contrato compartilhado: é como módulos e o frontend shell falam com o Core.
+# Módulos NUNCA se chamam diretamente — integração via eventos (RabbitMQ) ou via gateway.
+openapi: 3.1.0
+info:
+  title: SOGI Core API
+  version: 1.0.0
+  description: >
+    Core do SOGI: autenticação, registro de módulos (registry), bootstrap do shell,
+    multi-empresa, permissões, auditoria e notificações. Compatibilidade declarada
+    pelos módulos via campo `coreApi` no manifesto (semver range sobre `info.version`).
+servers:
+  - url: https://api.sogi.its.com.br/core/v1
+
+tags:
+  - { name: auth }
+  - { name: registry, description: usado pelos MÓDULOS (service-to-service, token de serviço) }
+  - { name: bootstrap, description: usado pelo frontend shell }
+  - { name: companies }
+  - { name: permissions }
+  - { name: audit }
+  - { name: notifications }
+
+security:
+  - bearerAuth: []
+
+paths:
+  # ───────────────────────── AUTH ─────────────────────────
+  /auth/login:
+    post:
+      tags: [auth]
+      security: []
+      summary: Login por e-mail/senha. Perfil cliente (domínio externo) recebe escopo "portal".
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200':
+          description: Senha ok — segue para 2FA
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  challengeId: { type: string, format: uuid }
+                  channels: { type: array, items: { type: string, enum: [push, whatsapp, totp] } }
+        '401': { $ref: '#/components/responses/Error' }
+  /auth/2fa/verify:
+    post:
+      tags: [auth]
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [challengeId, code]
+              properties:
+                challengeId: { type: string, format: uuid }
+                code: { type: string, minLength: 6, maxLength: 6 }
+      responses:
+        '200':
+          description: Tokens emitidos
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TokenPair' }
+  /auth/sso/google:
+    post:
+      tags: [auth]
+      security: []
+      summary: Troca id_token OIDC por TokenPair (somente domínio corporativo).
+      responses:
+        '200': { description: ok, content: { application/json: { schema: { $ref: '#/components/schemas/TokenPair' } } } }
+  /auth/refresh:
+    post: { tags: [auth], security: [], responses: { '200': { description: novo access token } } }
+  /auth/logout:
+    post: { tags: [auth], responses: { '204': { description: sessão revogada (audit) } } }
+  /auth/status:
+    put:
+      tags: [auth]
+      summary: Presença do usuário (online/busy/away/invisible) — propagada via socket.
+      requestBody:
+        content:
+          application/json:
+            schema: { type: object, properties: { status: { type: string, enum: [online, busy, away, invisible] } } }
+      responses: { '204': { description: ok } }
+
+  # ─────────────────────── REGISTRY ───────────────────────
+  /registry/register:
+    post:
+      tags: [registry]
+      summary: Módulo se registra no startup (idempotente). Token de SERVIÇO, não de usuário.
+      security: [{ serviceAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ModuleManifest' }
+      responses:
+        '201': { description: registrado }
+        '409': { description: 'coreApi incompatível ou dependsOn não satisfeito', content: { application/json: { schema: { $ref: '#/components/schemas/ErrorBody' } } } }
+  /registry/heartbeat:
+    put:
+      tags: [registry]
+      security: [{ serviceAuth: [] }]
+      summary: A cada 15s. 3 ausências ⇒ status offline; gateway passa a responder 503 MODULE_OFFLINE.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [key, version, health]
+              properties:
+                key: { type: string }
+                version: { type: string }
+                health: { $ref: '#/components/schemas/HealthReport' }
+      responses: { '204': { description: ok } }
+  /registry/modules:
+    get:
+      tags: [registry]
+      summary: Lista módulos (admin) — alimenta Configurações → Módulos e Saúde da Stack.
+      parameters: [{ $ref: '#/components/parameters/CompanyId' }]
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ModuleStatus' }
+  /registry/modules/{key}/restart:
+    post:
+      tags: [registry]
+      summary: Solicita restart ao orquestrador (admin; gera auditoria).
+      parameters: [{ name: key, in: path, required: true, schema: { type: string } }]
+      responses: { '202': { description: aceito } }
+
+  # ─────────────────────── BOOTSTRAP ──────────────────────
+  /me/bootstrap:
+    get:
+      tags: [bootstrap]
+      summary: >
+        Tudo que o shell precisa para montar a UI: usuário, empresas, módulos habilitados
+        (com remoteEntry p/ Module Federation), menus, permissões e template de dashboard do papel.
+      parameters: [{ $ref: '#/components/parameters/CompanyId' }]
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Bootstrap' }
+
+  # ─────────────────────── COMPANIES ──────────────────────
+  /companies:
+    get: { tags: [companies], responses: { '200': { description: empresas do usuário } } }
+    post:
+      tags: [companies]
+      summary: Criar empresa (admin). Nasce sem módulos habilitados.
+      responses: { '201': { description: criada (audit) } }
+  /companies/{companyId}/modules/{key}:
+    put:
+      tags: [companies]
+      summary: Habilita/desabilita módulo POR EMPRESA. Publica evento company.module_toggled.
+      parameters:
+        - { name: companyId, in: path, required: true, schema: { type: string, format: uuid } }
+        - { name: key, in: path, required: true, schema: { type: string } }
+      requestBody:
+        content:
+          application/json:
+            schema: { type: object, required: [enabled], properties: { enabled: { type: boolean } } }
+      responses:
+        '200': { description: ok (audit) }
+        '409': { description: dependência desabilitada (dependsOn) }
+
+  # ─────────────────────── PERMISSIONS ────────────────────
+  /roles:
+    get: { tags: [permissions], responses: { '200': { description: papéis da empresa } } }
+  /roles/{roleId}/permissions:
+    put:
+      tags: [permissions]
+      summary: Matriz papel×módulo. Nível 0=sem acesso, 1=leitura, 2=total. Invalida cache do gateway.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: { type: integer, enum: [0, 1, 2] }
+              example: { projects: 2, tasks: 2, tickets: 1, comms: 2, documents: 1, reports: 1, ai: 1, settings: 0 }
+      responses: { '200': { description: ok (audit + evento role.permissions_changed) } }
+
+  # ───────────────────────── AUDIT ────────────────────────
+  /audit:
+    post:
+      tags: [audit]
+      summary: Módulos registram ações administrativas (ou publicam audit.recorded no bus).
+      security: [{ serviceAuth: [] }, { bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AuditEntry' }
+      responses: { '201': { description: gravado } }
+    get:
+      tags: [audit]
+      summary: Busca no log consolidado (tela Auditoria & Logs) — full-text + filtros.
+      parameters:
+        - { name: q, in: query, schema: { type: string } }
+        - { name: module, in: query, schema: { type: string } }
+        - { name: userId, in: query, schema: { type: string } }
+        - { name: kind, in: query, schema: { type: string } }
+        - { name: page, in: query, schema: { type: integer, default: 1 } }
+        - { name: per_page, in: query, schema: { type: integer, default: 25, maximum: 100 } }
+      responses:
+        '200':
+          description: ok (header X-Total-Count)
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: '#/components/schemas/AuditEntry' } }
+
+  # ──────────────────── NOTIFICATIONS ─────────────────────
+  /notifications:
+    get: { tags: [notifications], responses: { '200': { description: notificações do usuário } } }
+  /notifications/dispatch:
+    post:
+      tags: [notifications]
+      summary: Módulos disparam notificação multi-canal (interno/e-mail/whatsapp/push) respeitando prefs do usuário.
+      security: [{ serviceAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userIds, kind, title]
+              properties:
+                userIds: { type: array, items: { type: string, format: uuid } }
+                kind: { type: string, example: ticket.sla_breached }
+                title: { type: string }
+                body: { type: string }
+                link: { type: string }
+      responses: { '202': { description: enfileirado } }
+
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }
+    serviceAuth: { type: http, scheme: bearer, description: token de serviço (client_credentials) — módulos apenas }
+  parameters:
+    CompanyId:
+      name: X-Company-Id
+      in: header
+      required: true
+      schema: { type: string, format: uuid }
+  responses:
+    Error:
+      description: erro padronizado
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorBody' }
+  schemas:
+    TokenPair:
+      type: object
+      properties:
+        accessToken: { type: string, description: JWT 15min — claims: sub, companyIds, roleId, scope(app|portal) }
+        refreshToken: { type: string }
+        profile: { type: string, enum: [internal, client] }
+    ErrorBody:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string, enum: [UNAUTHORIZED, COMPANY_FORBIDDEN, MODULE_OFFLINE, MODULE_DISABLED, PERMISSION_DENIED, VALIDATION, CONFLICT, NOT_FOUND] }
+            message: { type: string }
+            traceId: { type: string }
+    ModuleManifest:
+      type: object
+      required: [key, name, version, coreApi, baseUrl, healthUrl]
+      properties:
+        key: { type: string, example: tickets }
+        name: { type: string }
+        version: { type: string, example: 1.9.0 }
+        coreApi: { type: string, example: ^1.0 }
+        baseUrl: { type: string }
+        healthUrl: { type: string }
+        dependsOn: { type: array, items: { type: string } }
+        frontend:
+          type: object
+          properties:
+            remoteEntry: { type: string }
+            menu: { type: array, items: { $ref: '#/components/schemas/MenuItem' } }
+            settingsSections: { type: array, items: { type: object } }
+            dashboardWidgets: { type: array, items: { type: string } }
+            permissions: { type: array, items: { type: string } }
+        events:
+          type: object
+          properties:
+            publishes: { type: array, items: { type: string } }
+            subscribes: { type: array, items: { type: string } }
+    MenuItem:
+      type: object
+      properties:
+        id: { type: string }
+        label: { type: string }
+        icon: { type: string }
+        route: { type: string }
+        order: { type: integer }
+        badgeSource: { type: string, nullable: true }
+    HealthReport:
+      type: object
+      properties:
+        status: { type: string, enum: [ok, degraded, down] }
+        uptimeSec: { type: integer }
+        checks: { type: object, additionalProperties: { type: object } }
+    ModuleStatus:
+      type: object
+      properties:
+        key: { type: string }
+        name: { type: string }
+        version: { type: string }
+        status: { type: string, enum: [online, offline], description: saúde técnica (heartbeat) }
+        enabled: { type: boolean, description: habilitado para a empresa do header }
+        dependsOn: { type: array, items: { type: string } }
+        lastHeartbeat: { type: string, format: date-time }
+        health: { $ref: '#/components/schemas/HealthReport' }
+    Bootstrap:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id: { type: string }
+            name: { type: string }
+            role: { type: string }
+            status: { type: string }
+            theme: { type: string, enum: [light, dark] }
+        company: { type: object, properties: { id: { type: string }, name: { type: string } } }
+        companies: { type: array, items: { type: object } }
+        modules:
+          type: array
+          description: somente enabled+online com permissão ≥ 1 — shell monta sidebar e carrega remotes
+          items:
+            type: object
+            properties:
+              key: { type: string }
+              version: { type: string }
+              remoteEntry: { type: string }
+              menu: { type: array, items: { $ref: '#/components/schemas/MenuItem' } }
+        permissions:
+          type: object
+          additionalProperties: { type: integer, enum: [0, 1, 2] }
+        dashboardTemplate: { type: object, description: template do papel (Configurações → Dashboards) }
+    AuditEntry:
+      type: object
+      required: [module, action]
+      properties:
+        id: { type: string, readOnly: true }
+        companyId: { type: string }
+        userId: { type: string, nullable: true, description: null = ação de sistema }
+        module: { type: string }
+        action: { type: string, example: 'Reiniciou serviço Socket Server (produção)' }
+        kind: { type: string, example: service }
+        target: { type: string }
+        detail: { type: object }
+        ip: { type: string }
+        createdAt: { type: string, format: date-time, readOnly: true }

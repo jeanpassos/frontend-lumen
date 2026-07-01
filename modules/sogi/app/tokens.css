@@ -1,0 +1,178 @@
+/* SOGI — Design tokens · marca ITS */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Cor — base ITS */
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  /* Texto */
+  --text: #1e293b;
+  --text-2: #475569;
+  --text-3: #64748b;
+
+  /* Sidebar azul ITS */
+  --nav-bg: #183c5a;
+  --nav-bg-2: #1d4a6e;
+  --nav-text: #9fb3c8;
+  --nav-text-active: #ffffff;
+  --nav-active: #E85928;
+
+  /* Acentos — paleta ITS */
+  --accent: #E85928;
+  --accent-strong: #c64516;
+  --accent-soft: #fff3ee;
+  --accent-text: #c64516;
+
+  --ok: #16a34a;
+  --ok-soft: #f0fdf4;
+  --warn: #d97706;
+  --warn-soft: #fffbeb;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+  --violet: #0284c7;
+  --violet-soft: #f0f9ff;
+
+  /* Tipo */
+  --font-ui: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+
+  /* Métricas */
+  --radius: 10px;
+  --radius-sm: 7px;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 1px var(--border);
+  --shadow-pop: 0 8px 32px rgba(0, 0, 0, 0.13), 0 0 0 1px var(--border);
+  --pad: 16px;
+  --topbar-h: 56px;
+  --sidebar-w: 232px;
+}
+
+[data-density="compact"] {
+  --pad: 11px;
+  --radius: 8px;
+}
+
+/* ===== Tema escuro ===== */
+[data-theme="dark"] {
+  --bg: #0d1622;
+  --surface: #152232;
+  --surface-2: #1b2a3d;
+  --border: #243750;
+  --border-strong: #33496a;
+
+  --text: #e6edf6;
+  --text-2: #aabdd4;
+  --text-3: #6e85a3;
+
+  --nav-bg: #0a111b;
+  --nav-bg-2: #112032;
+  --nav-text: #8aa2bf;
+
+  --accent-soft: rgba(232, 89, 40, 0.14);
+  --ok-soft: rgba(22, 163, 74, 0.14);
+  --warn-soft: rgba(217, 119, 6, 0.15);
+  --danger-soft: rgba(220, 38, 38, 0.15);
+  --violet-soft: rgba(2, 132, 199, 0.15);
+
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border);
+  --shadow-pop: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--border);
+}
+[data-theme="dark"] .its-logo-on-light { display: none !important; }
+[data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border) !important;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { height: 100%; }
+
+::selection { background: var(--accent-soft); }
+
+button {
+  font-family: var(--font-ui);
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+  padding: 0;
+}
+
+input, textarea {
+  font-family: var(--font-ui);
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Scrollbars discretos */
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* Utilitários básicos */
+.mono { font-family: var(--font-mono); }
+
+/* Grids responsivos */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.dash-grid > * { min-width: 0; }
+@media (max-width: 1280px) {
+  .dash-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 1100px) {
+  .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 880px) {
+  .dash-grid { grid-template-columns: 1fr; }
+}
+
+/* Logo ITS — troca conforme tema da sidebar */
+[data-sidebar="light"] .its-logo-on-dark { display: none !important; }
+[data-sidebar="light"] .its-logo-on-light { display: block !important; }
+
+/* Topbar responsiva */
+.topbar-search { flex: 0 1 420px; min-width: 0; overflow: hidden; }
+.topbar-search span:first-of-type { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 1180px) {
+  .topbar-profile-text { display: none !important; }
+}
+@media (max-width: 1020px) {
+  .topbar-company-name { display: none; }
+  .topbar-search { flex-basis: 220px; }
+  .topbar-search .kbd-hint { display: none; }
+}
+
+@keyframes sogi-fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sogi-pop {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}

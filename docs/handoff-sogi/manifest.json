@@ -1,0 +1,13 @@
+{
+  "name": "SOGI — Sistema Operacional de Gestão Interna",
+  "short_name": "SOGI",
+  "description": "Plataforma 360° da ITS: projetos, tarefas, chamados, comunicação e IA",
+  "start_url": "./SOGI.html",
+  "display": "standalone",
+  "background_color": "#183c5a",
+  "theme_color": "#183c5a",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "assets/its-logo.png", "sizes": "814x307", "type": "image/png", "purpose": "any" }
+  ]
+}

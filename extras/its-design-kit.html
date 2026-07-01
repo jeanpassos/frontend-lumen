@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITS Design Kit — Referência Visual</title>
+  <style>
+    /* ═══════════════════════════════════════
+       TOKENS DE DESIGN — copie para seu projeto
+    ═══════════════════════════════════════ */
+    :root {
+      --its-sidebar:   #183c5a;   /* Azul sidebar/header */
+      --its-orange:    #E85928;   /* Laranja destaque/ação */
+      --its-bg:        #f0f2f5;   /* Fundo geral */
+      --its-white:     #ffffff;
+      --its-text:      #1e293b;
+      --its-muted:     #64748b;
+      --its-border:    #e2e8f0;
+      --its-danger:    #dc2626;
+      --its-success:   #16a34a;
+      --its-warning:   #d97706;
+      --its-info:      #0284c7;
+
+      --radius-sm:     6px;
+      --radius-md:     10px;
+      --radius-lg:     14px;
+
+      --shadow-sm:     0 1px 3px rgba(0,0,0,.08);
+      --shadow-md:     0 4px 16px rgba(0,0,0,.10);
+      --shadow-lg:     0 8px 32px rgba(0,0,0,.13);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #e8ecf0; color: var(--its-text); }
+
+    /* ── Layout do kit ── */
+    .kit-header {
+      background: var(--its-sidebar);
+      color: #fff;
+      padding: 28px 40px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .kit-logo {
+      background: var(--its-orange);
+      width: 46px; height: 46px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 16px;
+    }
+    .kit-header h1 { font-size: 1.4rem; font-weight: 700; }
+    .kit-header p  { font-size: .85rem; color: #94a3b8; margin-top: 2px; }
+
+    .kit-nav {
+      background: var(--its-sidebar);
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding: 0 40px;
+      display: flex; gap: 4px;
+    }
+    .kit-nav a {
+      color: rgba(255,255,255,.6); text-decoration: none;
+      padding: 10px 14px; font-size: .82rem; font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: all .15s;
+    }
+    .kit-nav a:hover, .kit-nav a.active { color: #fff; border-color: var(--its-orange); }
+
+    .kit-body { max-width: 1100px; margin: 32px auto; padding: 0 24px 80px; }
+
+    .section { margin-bottom: 48px; }
+    .section-title {
+      font-size: 1rem; font-weight: 700; color: var(--its-sidebar);
+      border-left: 3px solid var(--its-orange);
+      padding-left: 10px; margin-bottom: 20px;
+      text-transform: uppercase; letter-spacing: .06em;
+    }
+
+    /* ── Code panel ── */
+    .with-code { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+    @media (max-width: 760px) { .with-code { grid-template-columns: 1fr; } }
+
+    .preview-box {
+      background: var(--its-white);
+      border: 1px solid var(--its-border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+    }
+    .preview-box.dark  { background: var(--its-bg); }
+    .preview-box.sidebar-bg { background: var(--its-sidebar); }
+
+    .code-box {
+      background: #0f172a;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .code-top {
+      background: rgba(255,255,255,.05);
+      padding: 8px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: .72rem; color: #64748b;
+    }
+    .code-dots { display: flex; gap: 5px; }
+    .code-dots span { width: 8px; height: 8px; border-radius: 50%; }
+    .d1 { background: #ff5f57; }
+    .d2 { background: #febc2e; }
+    .d3 { background: #28c840; }
+    .code-box pre {
+      padding: 14px 16px;
+      font-family: 'Cascadia Code','Fira Code','Consolas', monospace;
+      font-size: .78rem; color: #e2e8f0; line-height: 1.7; overflow-x: auto;
+    }
+    .t-prop { color: #7dd3fc; }
+    .t-val  { color: #86efac; }
+    .t-cmt  { color: #475569; }
+    .t-sel  { color: #c084fc; }
+    .t-str  { color: #fbbf24; }
+
+    /* ────────────────────────────────────────
+       COMPONENTES — todos prontos para copiar
+    ──────────────────────────────────────── */
+
+    /* ── Paleta ── */
+    .palette { display: flex; gap: 10px; flex-wrap: wrap; }
+    .swatch {
+      width: 100px; border-radius: 8px; overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .swatch-color { height: 60px; }
+    .swatch-info { padding: 8px; background: #fff; font-size: .72rem; }
+    .swatch-info .name { font-weight: 600; }
+    .swatch-info .hex  { color: var(--its-muted); font-family: monospace; }
+
+    /* ── Login ── */
+    .login-page {
+      min-height: 360px;
+      background: var(--its-bg);
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-md);
+    }
+    .login-card {
+      background: var(--its-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 36px 32px;
+      width: 100%; max-width: 360px;
+    }
+    .login-card .brand {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
+    }
+    .login-card .brand-icon {
+      background: var(--its-sidebar);
+      width: 38px; height: 38px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 800; font-size: 13px;
+    }
+    .login-card .brand-name { font-weight: 700; font-size: 1.1rem; color: var(--its-sidebar); }
+    .login-card h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+    .login-card .subtitle { font-size: .82rem; color: var(--its-muted); margin-bottom: 22px; }
+
+    .its-label {
+      display: block; font-size: .78rem; font-weight: 600;
+      color: var(--its-text); margin-bottom: 5px;
+    }
+    .its-input {
+      width: 100%; padding: 9px 12px;
+      border: 1.5px solid var(--its-border);
+      border-radius: var(--radius-sm);
+      font-size: .9rem; color: var(--its-text);
+      outline: none; transition: border-color .15s;
+      background: #fff;
+    }
+    .its-input:focus { border-color: var(--its-sidebar); }
+    .form-group { margin-bottom: 14px; }
+
+    .its-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 9px 18px; border: none; border-radius: var(--radius-sm);
+      font-size: .88rem; font-weight: 600; cursor: pointer;
+      transition: filter .15s, transform .1s;
+    }
+    .its-btn:hover { filter: brightness(1.08); }
+    .its-btn:active { transform: scale(.98); }
+    .its-btn-primary { background: var(--its-orange); color: #fff; }
+    .its-btn-secondary { background: var(--its-sidebar); color: #fff; }
+    .its-btn-outline {
+      background: transparent; color: var(--its-sidebar);
+      border: 1.5px solid var(--its-sidebar);
+    }
+    .its-btn-ghost {
+      background: transparent; color: var(--its-muted);
+      border: 1.5px solid var(--its-border);
+    }
+    .its-btn-danger { background: var(--its-danger); color: #fff; }
+    .its-btn-full { width: 100%; }
+
+    /* ── Layout interno (sidebar) ── */
+    .app-shell {
+      display: flex; height: 340px; border-radius: var(--radius-md);
+      overflow: hidden; box-shadow: var(--shadow-md);
+    }
+    .app-sidebar {
+      width: 200px; background: var(--its-sidebar);
+      flex-shrink: 0; padding: 0;
+      display: flex; flex-direction: column;
+    }
+    .sidebar-logo {
+      padding: 16px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .sidebar-logo .icon {
+      background: var(--its-orange);
+      width: 30px; height: 30px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 11px; color: #fff;
+    }
+    .sidebar-logo .name { font-weight: 700; color: #fff; font-size: .85rem; }
+
+    .sidebar-section { padding: 12px 8px 4px; }
+    .sidebar-section-label {
+      font-size: .65rem; font-weight: 700; color: rgba(255,255,255,.35);
+      text-transform: uppercase; letter-spacing: .08em;
+      padding: 0 8px; margin-bottom: 4px;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 10px; border-radius: 6px;
+      color: rgba(255,255,255,.65); font-size: .8rem;
+      cursor: pointer; transition: all .15s;
+    }
+    .sidebar-item:hover { background: rgba(255,255,255,.08); color: #fff; }
+    .sidebar-item.active { background: var(--its-orange); color: #fff; }
+    .sidebar-item .icon { font-size: .9rem; width: 16px; text-align: center; }
+
+    .app-main { flex: 1; background: var(--its-bg); display: flex; flex-direction: column; overflow: hidden; }
+    .app-topbar {
+      background: var(--its-white);
+      border-bottom: 1px solid var(--its-border);
+      padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .app-topbar .page-title { font-weight: 700; font-size: .9rem; }
+    .app-topbar .avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--its-orange);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: .72rem; font-weight: 700;
+    }
+    .app-content { padding: 16px; flex: 1; overflow: auto; }
+
+    /* ── Cards ── */
+    .its-card {
+      background: var(--its-white);
+      border: 1px solid var(--its-border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+    }
+    .its-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .its-card-title { font-size: .85rem; font-weight: 700; color: var(--its-text); }
+    .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--its-sidebar); }
+    .stat-label { font-size: .75rem; color: var(--its-muted); margin-top: 2px; }
+    .stat-delta { font-size: .75rem; color: var(--its-success); font-weight: 600; }
+
+    .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 600px) { .card-grid { grid-template-columns: 1fr; } }
+
+    /* ── Badge ── */
+    .its-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; border-radius: 20px;
+      font-size: .72rem; font-weight: 600;
+    }
+    .badge-orange  { background: #fff3ee; color: var(--its-orange); border: 1px solid #fdd0be; }
+    .badge-blue    { background: #eef4fb; color: var(--its-sidebar); border: 1px solid #b8d0ea; }
+    .badge-green   { background: #f0fdf4; color: var(--its-success); border: 1px solid #bbf7d0; }
+    .badge-red     { background: #fef2f2; color: var(--its-danger);  border: 1px solid #fecaca; }
+    .badge-gray    { background: #f8fafc; color: var(--its-muted);   border: 1px solid var(--its-border); }
+    .badge-dot     { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    /* ── Table ── */
+    .its-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    .its-table th {
+      background: var(--its-sidebar); color: #fff;
+      padding: 9px 14px; text-align: left;
+      font-size: .73rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+    }
+    .its-table th:first-child { border-radius: 8px 0 0 0; }
+    .its-table th:last-child  { border-radius: 0 8px 0 0; }
+    .its-table td { padding: 9px 14px; border-bottom: 1px solid var(--its-border); }
+    .its-table tr:last-child td { border-bottom: none; }
+    .its-table tr:hover td { background: #f8fafc; }
+
+    /* ── Alert ── */
+    .its-alert {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 12px 14px; border-radius: var(--radius-sm);
+      font-size: .85rem; margin-bottom: 8px;
+    }
+    .alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+    .alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+    .alert-error   { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+    .alert-info    { background: #f0f9ff; border: 1px solid #bae6fd; color: #075985; }
+
+    /* separador visual */
+    .divider { border: none; border-top: 1px solid var(--its-border); margin: 32px 0; }
+
+    /* ── btn copiar ── */
+    .copy-btn {
+      background: rgba(255,255,255,.08); border: none; color: #94a3b8;
+      padding: 4px 10px; border-radius: 4px; font-size: .72rem; cursor: pointer;
+      transition: background .15s;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,.15); color: #fff; }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="kit-header">
+  <div class="kit-logo">ITS</div>
+  <div>
+    <h1>ITS Design Kit</h1>
+    <p>Tokens, componentes e layouts prontos para copiar — baseado no Portal ITS</p>
+  </div>
+</div>
+<nav class="kit-nav">
+  <a href="#tokens" class="active">Tokens</a>
+  <a href="#login">Login</a>
+  <a href="#layout">Layout</a>
+  <a href="#buttons">Botões</a>
+  <a href="#cards">Cards</a>
+  <a href="#badges">Badges</a>
+  <a href="#table">Tabela</a>
+  <a href="#alerts">Alertas</a>
+</nav>
+
+<div class="kit-body">
+
+  <!-- ══ 1. TOKENS ══ -->
+  <div class="section" id="tokens">
+    <div class="section-title">1 · Tokens de Design</div>
+    <div class="with-code">
+      <div>
+        <div class="preview-box">
+          <div class="palette">
+            <div class="swatch">
+              <div class="swatch-color" style="background:#183c5a"></div>
+              <div class="swatch-info"><div class="name">Sidebar</div><div class="hex">#183c5a</div></div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#E85928"></div>
+              <div class="swatch-info"><div class="name">Laranja</div><div class="hex">#E85928</div></div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#f0f2f5; border:1px solid #e2e8f0"></div>
+              <div class="swatch-info"><div class="name">Background</div><div class="hex">#f0f2f5</div></div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#1e293b"></div>
+              <div class="swatch-info"><div class="name">Texto</div><div class="hex">#1e293b</div></div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#64748b"></div>
+              <div class="swatch-info"><div class="name">Muted</div><div class="hex">#64748b</div></div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#e2e8f0"></div>
+              <div class="swatch-info"><div class="name">Borda</div><div class="hex">#e2e8f0</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="code-box">
+        <div class="code-top">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span>CSS Variables — cole no :root</span>
+          <button class="copy-btn" onclick="copyCode(this)">copiar</button>
+        </div>
+        <pre><span class="t-sel">:root</span> {
+  <span class="t-prop">--its-sidebar</span>: <span class="t-str">#183c5a</span>;
+  <span class="t-prop">--its-orange</span>:  <span class="t-str">#E85928</span>;
+  <span class="t-prop">--its-bg</span>:      <span class="t-str">#f0f2f5</span>;
+  <span class="t-prop">--its-white</span>:   <span class="t-str">#ffffff</span>;
+  <span class="t-prop">--its-text</span>:    <span class="t-str">#1e293b</span>;
+  <span class="t-prop">--its-muted</span>:   <span class="t-str">#64748b</span>;
+  <span class="t-prop">--its-border</span>:  <span class="t-str">#e2e8f0</span>;
+  <span class="t-prop">--its-danger</span>:  <span class="t-str">#dc2626</span>;
+  <span class="t-prop">--its-success</span>: <span class="t-str">#16a34a</span>;
+  <span class="t-prop">--its-warning</span>: <span class="t-str">#d97706</span>;
+
+  <span class="t-prop">--radius-sm</span>: <span class="t-val">6px</span>;
+  <span class="t-prop">--radius-md</span>: <span class="t-val">10px</span>;
+  <span class="t-prop">--radius-lg</span>: <span class="t-val">14px</span>;
+
+  <span class="t-prop">--shadow-sm</span>: <span class="t-val">0 1px 3px rgba(0,0,0,.08)</span>;
+  <span class="t-prop">--shadow-md</span>: <span class="t-val">0 4px 16px rgba(0,0,0,.10)</span>;
+  <span class="t-prop">--shadow-lg</span>: <span class="t-val">0 8px 32px rgba(0,0,0,.13)</span>;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ══ 2. LOGIN ══ -->
+  <div class="section" id="login">
+    <div class="section-title">2 · Tela de Login</div>
+    <div class="with-code">
+      <div>
+        <div class="login-page">
+          <div class="login-card">
+            <div class="brand">
+              <div class="brand-icon">ITS</div>
+              <div class="brand-name">Portal ITS</div>
+            </div>
+            <h2>Bem-vindo de volta</h2>
+            <p class="subtitle">Entre com suas credenciais</p>
+            <div class="form-group">
+              <label class="its-label">E-mail</label>
+              <input class="its-input" type="email" placeholder="seu@email.com" />
+            </div>
+            <div class="form-group">
+              <label class="its-label">Senha</label>
+              <input class="its-input" type="password" placeholder="••••••••" />
+            </div>
+            <button class="its-btn its-btn-primary its-btn-full" style="margin-top:6px">
+              Entrar
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="code-box">
+        <div class="code-top">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span>HTML — Tela de Login</span>
+          <button class="copy-btn" onclick="copyCode(this)">copiar</button>
+        </div>
+        <pre><span class="t-cmt">&lt;!-- fundo da página --&gt;</span>
+&lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"login-page"</span>&gt;
+  &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"login-card"</span>&gt;
+
+    <span class="t-cmt">&lt;!-- logo --&gt;</span>
+    &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"brand"</span>&gt;
+      &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"brand-icon"</span>&gt;ITS&lt;/<span class="t-sel">div</span>&gt;
+      &lt;<span class="t-sel">span</span> <span class="t-prop">class</span>=<span class="t-str">"brand-name"</span>&gt;Portal ITS&lt;/<span class="t-sel">span</span>&gt;
+    &lt;/<span class="t-sel">div</span>&gt;
+
+    &lt;<span class="t-sel">h2</span>&gt;Bem-vindo de volta&lt;/<span class="t-sel">h2</span>&gt;
+    &lt;<span class="t-sel">p</span> <span class="t-prop">class</span>=<span class="t-str">"subtitle"</span>&gt;
+      Entre com suas credenciais
+    &lt;/<span class="t-sel">p</span>&gt;
+
+    &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"form-group"</span>&gt;
+      &lt;<span class="t-sel">label</span> <span class="t-prop">class</span>=<span class="t-str">"its-label"</span>&gt;E-mail&lt;/<span class="t-sel">label</span>&gt;
+      &lt;<span class="t-sel">input</span> <span class="t-prop">class</span>=<span class="t-str">"its-input"</span>
+             <span class="t-prop">type</span>=<span class="t-str">"email"</span>
+             <span class="t-prop">placeholder</span>=<span class="t-str">"seu@email.com"</span>&gt;
+    &lt;/<span class="t-sel">div</span>&gt;
+
+    &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"form-group"</span>&gt;
+      &lt;<span class="t-sel">label</span> <span class="t-prop">class</span>=<span class="t-str">"its-label"</span>&gt;Senha&lt;/<span class="t-sel">label</span>&gt;
+      &lt;<span class="t-sel">input</span> <span class="t-prop">class</span>=<span class="t-str">"its-input"</span>
+             <span class="t-prop">type</span>=<span class="t-str">"password"</span>
+             <span class="t-prop">placeholder</span>=<span class="t-str">"••••••••"</span>&gt;
+    &lt;/<span class="t-sel">div</span>&gt;
+
+    &lt;<span class="t-sel">button</span> <span class="t-prop">class</span>=<span class="t-str">"its-btn its-btn-primary its-btn-full"</span>&gt;
+      Entrar
+    &lt;/<span class="t-sel">button</span>&gt;
+  &lt;/<span class="t-sel">div</span>&gt;
+&lt;/<span class="t-sel">div</span>&gt;</pre>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ══ 3. LAYOUT ══ -->
+  <div class="section" id="layout">
+    <div class="section-title">3 · Layout Interno (Sidebar + Conteúdo)</div>
+    <div style="margin-bottom:16px">
+      <div class="app-shell">
+        <!-- sidebar -->
+        <div class="app-sidebar">
+          <div class="sidebar-logo">
+            <div class="icon">ITS</div>
+            <span class="name">Portal</span>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-section-label">Menu</div>
+            <div class="sidebar-item active"><span class="icon">◼</span> Dashboard</div>
+            <div class="sidebar-item"><span class="icon">◼</span> Projetos</div>
+            <div class="sidebar-item"><span class="icon">◼</span> Relatórios</div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-section-label">Sistema</div>
+            <div class="sidebar-item"><span class="icon">◼</span> Configurações</div>
+            <div class="sidebar-item"><span class="icon">◼</span> Usuários</div>
+          </div>
+        </div>
+        <!-- main -->
+        <div class="app-main">
+          <div class="app-topbar">
+            <span class="page-title">Dashboard</span>
+            <div class="avatar">DB</div>
+          </div>
+          <div class="app-content">
+            <div class="card-grid">
+              <div class="its-card">
+                <div class="stat-value">142</div>
+                <div class="stat-label">Processos</div>
+                <div class="stat-delta">↑ 12% este mês</div>
+              </div>
+              <div class="its-card">
+                <div class="stat-value">R$ 48k</div>
+                <div class="stat-label">Receita</div>
+                <div class="stat-delta">↑ 5%</div>
+              </div>
+              <div class="its-card">
+                <div class="stat-value">98%</div>
+                <div class="stat-label">Uptime</div>
+                <div class="stat-delta">↑ estável</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="code-box">
+      <div class="code-top">
+        <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+        <span>HTML — Estrutura AppShell</span>
+        <button class="copy-btn" onclick="copyCode(this)">copiar</button>
+      </div>
+      <pre>&lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"app-shell"</span>&gt;
+
+  <span class="t-cmt">&lt;!-- Sidebar --&gt;</span>
+  &lt;<span class="t-sel">aside</span> <span class="t-prop">class</span>=<span class="t-str">"app-sidebar"</span>&gt;
+    &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"sidebar-logo"</span>&gt;
+      &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"icon"</span>&gt;ITS&lt;/<span class="t-sel">div</span>&gt;
+      &lt;<span class="t-sel">span</span> <span class="t-prop">class</span>=<span class="t-str">"name"</span>&gt;Portal&lt;/<span class="t-sel">span</span>&gt;
+    &lt;/<span class="t-sel">div</span>&gt;
+    &lt;<span class="t-sel">nav</span> <span class="t-prop">class</span>=<span class="t-str">"sidebar-section"</span>&gt;
+      &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"sidebar-section-label"</span>&gt;Menu&lt;/<span class="t-sel">div</span>&gt;
+      &lt;<span class="t-sel">a</span> <span class="t-prop">class</span>=<span class="t-str">"sidebar-item active"</span> <span class="t-prop">href</span>=<span class="t-str">"/"</span>&gt;Dashboard&lt;/<span class="t-sel">a</span>&gt;
+      &lt;<span class="t-sel">a</span> <span class="t-prop">class</span>=<span class="t-str">"sidebar-item"</span> <span class="t-prop">href</span>=<span class="t-str">"/projetos"</span>&gt;Projetos&lt;/<span class="t-sel">a</span>&gt;
+    &lt;/<span class="t-sel">nav</span>&gt;
+  &lt;/<span class="t-sel">aside</span>&gt;
+
+  <span class="t-cmt">&lt;!-- Área principal --&gt;</span>
+  &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"app-main"</span>&gt;
+    &lt;<span class="t-sel">header</span> <span class="t-prop">class</span>=<span class="t-str">"app-topbar"</span>&gt;
+      &lt;<span class="t-sel">h1</span> <span class="t-prop">class</span>=<span class="t-str">"page-title"</span>&gt;Dashboard&lt;/<span class="t-sel">h1</span>&gt;
+      &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"avatar"</span>&gt;DB&lt;/<span class="t-sel">div</span>&gt;
+    &lt;/<span class="t-sel">header</span>&gt;
+    &lt;<span class="t-sel">main</span> <span class="t-prop">class</span>=<span class="t-str">"app-content"</span>&gt;
+      <span class="t-cmt">&lt;!-- conteúdo da página --&gt;</span>
+    &lt;/<span class="t-sel">main</span>&gt;
+  &lt;/<span class="t-sel">div</span>&gt;
+
+&lt;/<span class="t-sel">div</span>&gt;</pre>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ══ 4. BOTÕES ══ -->
+  <div class="section" id="buttons">
+    <div class="section-title">4 · Botões</div>
+    <div class="with-code">
+      <div class="preview-box" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+        <button class="its-btn its-btn-primary">Primário</button>
+        <button class="its-btn its-btn-secondary">Secundário</button>
+        <button class="its-btn its-btn-outline">Outline</button>
+        <button class="its-btn its-btn-ghost">Ghost</button>
+        <button class="its-btn its-btn-danger">Danger</button>
+      </div>
+      <div class="code-box">
+        <div class="code-top">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span>HTML + CSS — Botões</span>
+          <button class="copy-btn" onclick="copyCode(this)">copiar</button>
+        </div>
+        <pre><span class="t-cmt">/* CSS */</span>
+<span class="t-sel">.its-btn</span> {
+  <span class="t-prop">display</span>: <span class="t-val">inline-flex</span>;
+  <span class="t-prop">align-items</span>: <span class="t-val">center</span>;
+  <span class="t-prop">padding</span>: <span class="t-val">9px 18px</span>;
+  <span class="t-prop">border</span>: <span class="t-val">none</span>;
+  <span class="t-prop">border-radius</span>: <span class="t-val">var(--radius-sm)</span>;
+  <span class="t-prop">font-weight</span>: <span class="t-val">600</span>;
+  <span class="t-prop">cursor</span>: <span class="t-val">pointer</span>;
+}
+<span class="t-sel">.its-btn-primary</span>  { <span class="t-prop">background</span>: <span class="t-val">var(--its-orange)</span>; <span class="t-prop">color</span>: <span class="t-val">#fff</span>; }
+<span class="t-sel">.its-btn-secondary</span>{ <span class="t-prop">background</span>: <span class="t-val">var(--its-sidebar)</span>; <span class="t-prop">color</span>: <span class="t-val">#fff</span>; }
+<span class="t-sel">.its-btn-outline</span>  { <span class="t-prop">background</span>: <span class="t-val">transparent</span>; <span class="t-prop">color</span>: <span class="t-val">var(--its-sidebar)</span>; <span class="t-prop">border</span>: <span class="t-val">1.5px solid var(--its-sidebar)</span>; }
+<span class="t-sel">.its-btn-danger</span>   { <span class="t-prop">background</span>: <span class="t-val">#dc2626</span>; <span class="t-prop">color</span>: <span class="t-val">#fff</span>; }
+<span class="t-sel">.its-btn-full</span>     { <span class="t-prop">width</span>: <span class="t-val">100%</span>; <span class="t-prop">justify-content</span>: <span class="t-val">center</span>; }
+
+<span class="t-cmt">&lt;!-- HTML --&gt;</span>
+&lt;<span class="t-sel">button</span> <span class="t-prop">class</span>=<span class="t-str">"its-btn its-btn-primary"</span>&gt;Primário&lt;/<span class="t-sel">button</span>&gt;
+&lt;<span class="t-sel">button</span> <span class="t-prop">class</span>=<span class="t-str">"its-btn its-btn-secondary"</span>&gt;Secundário&lt;/<span class="t-sel">button</span>&gt;
+&lt;<span class="t-sel">button</span> <span class="t-prop">class</span>=<span class="t-str">"its-btn its-btn-outline"</span>&gt;Outline&lt;/<span class="t-sel">button</span>&gt;
+&lt;<span class="t-sel">button</span> <span class="t-prop">class</span>=<span class="t-str">"its-btn its-btn-danger"</span>&gt;Danger&lt;/<span class="t-sel">button</span>&gt;</pre>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ══ 5. CARDS ══ -->
+  <div class="section" id="cards">
+    <div class="section-title">5 · Cards de Estatística</div>
+    <div class="with-code">
+      <div class="preview-box dark">
+        <div class="card-grid">
+          <div class="its-card">
+            <div class="stat-value">142</div>
+            <div class="stat-label">Processos abertos</div>
+            <div class="stat-delta">↑ 12% este mês</div>
+          </div>
+          <div class="its-card">
+            <div class="stat-value">R$ 48k</div>
+            <div class="stat-label">Receita mensal</div>
+            <div class="stat-delta">↑ 5% vs anterior</div>
+          </div>
+          <div class="its-card">
+            <div class="stat-value">98%</div>
+            <div class="stat-label">Uptime</div>
+            <div class="stat-delta">↑ estável</div>
+          </div>
+        </div>
+      </div>
+      <div class="code-box">
+        <div class="code-top">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span>HTML — Card de Stat</span>
+          <button class="copy-btn" onclick="copyCode(this)">copiar</button>
+        </div>
+        <pre>&lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"its-card"</span>&gt;
+  &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"stat-value"</span>&gt;142&lt;/<span class="t-sel">div</span>&gt;
+  &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"stat-label"</span>&gt;Processos abertos&lt;/<span class="t-sel">div</span>&gt;
+  &lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"stat-delta"</span>&gt;↑ 12% este mês&lt;/<span class="t-sel">div</span>&gt;
+&lt;/<span class="t-sel">div</span>&gt;
+
+<span class="t-cmt">/* CSS */</span>
+<span class="t-sel">.its-card</span> {
+  <span class="t-prop">background</span>: <span class="t-val">var(--its-white)</span>;
+  <span class="t-prop">border</span>: <span class="t-val">1px solid var(--its-border)</span>;
+  <span class="t-prop">border-radius</span>: <span class="t-val">var(--radius-md)</span>;
+  <span class="t-prop">padding</span>: <span class="t-val">18px 20px</span>;
+}
+<span class="t-sel">.stat-value</span> { <span class="t-prop">font-size</span>: <span class="t-val">1.5rem</span>; <span class="t-prop">font-weight</span>: <span class="t-val">800</span>; <span class="t-prop">color</span>: <span class="t-val">var(--its-sidebar)</span>; }
+<span class="t-sel">.stat-label</span> { <span class="t-prop">font-size</span>: <span class="t-val">.75rem</span>; <span class="t-prop">color</span>: <span class="t-val">var(--its-muted)</span>; }
+<span class="t-sel">.stat-delta</span> { <span class="t-prop">font-size</span>: <span class="t-val">.75rem</span>; <span class="t-prop">color</span>: <span class="t-val">#16a34a</span>; <span class="t-prop">font-weight</span>: <span class="t-val">600</span>; }</pre>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ══ 6. BADGES ══ -->
+  <div class="section" id="badges">
+    <div class="section-title">6 · Badges / Status</div>
+    <div class="with-code">
+      <div class="preview-box" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+        <span class="its-badge badge-orange"><span class="badge-dot"></span>Em andamento</span>
+        <span class="its-badge badge-green"><span class="badge-dot"></span>Concluído</span>
+        <span class="its-badge badge-red"><span class="badge-dot"></span>Cancelado</span>
+        <span class="its-badge badge-blue"><span class="badge-dot"></span>Aguardando</span>
+        <span class="its-badge badge-gray">Rascunho</span>
+      </div>
+      <div class="code-box">
+        <div class="code-top">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span>HTML — Badges</span>
+          <button class="copy-btn" onclick="copyCode(this)">copiar</button>
+        </div>
+        <pre>&lt;<span class="t-sel">span</span> <span class="t-prop">class</span>=<span class="t-str">"its-badge badge-orange"</span>&gt;
+  &lt;<span class="t-sel">span</span> <span class="t-prop">class</span>=<span class="t-str">"badge-dot"</span>&gt;&lt;/<span class="t-sel">span</span>&gt; Em andamento
+&lt;/<span class="t-sel">span</span>&gt;
+&lt;<span class="t-sel">span</span> <span class="t-prop">class</span>=<span class="t-str">"its-badge badge-green"</span>&gt;
+  &lt;<span class="t-sel">span</span> <span class="t-prop">class</span>=<span class="t-str">"badge-dot"</span>&gt;&lt;/<span class="t-sel">span</span>&gt; Concluído
+&lt;/<span class="t-sel">span</span>&gt;
+
+<span class="t-cmt">/* variações: badge-orange badge-green
+              badge-red badge-blue badge-gray */</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ══ 7. TABLE ══ -->
+  <div class="section" id="table">
+    <div class="section-title">7 · Tabela</div>
+    <div class="with-code">
+      <div class="preview-box dark" style="padding:0; overflow:hidden; border-radius:var(--radius-md)">
+        <table class="its-table">
+          <thead>
+            <tr><th>Processo</th><th>Status</th><th>Responsável</th><th>Valor</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PE 001/2026</td>
+              <td><span class="its-badge badge-orange"><span class="badge-dot"></span>Em andamento</span></td>
+              <td>Laerty</td>
+              <td>R$ 12.000</td>
+            </tr>
+            <tr>
+              <td>DE 004/2026</td>
+              <td><span class="its-badge badge-green"><span class="badge-dot"></span>Concluído</span></td>
+              <td>Elaine</td>
+              <td>R$ 8.500</td>
+            </tr>
+            <tr>
+              <td>PR 007/2026</td>
+              <td><span class="its-badge badge-blue"><span class="badge-dot"></span>Aguardando</span></td>
+              <td>Julio</td>
+              <td>R$ 45.000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="code-box">
+        <div class="code-top">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span>HTML — Tabela</span>
+          <button class="copy-btn" onclick="copyCode(this)">copiar</button>
+        </div>
+        <pre>&lt;<span class="t-sel">table</span> <span class="t-prop">class</span>=<span class="t-str">"its-table"</span>&gt;
+  &lt;<span class="t-sel">thead</span>&gt;
+    &lt;<span class="t-sel">tr</span>&gt;
+      &lt;<span class="t-sel">th</span>&gt;Processo&lt;/<span class="t-sel">th</span>&gt;
+      &lt;<span class="t-sel">th</span>&gt;Status&lt;/<span class="t-sel">th</span>&gt;
+      &lt;<span class="t-sel">th</span>&gt;Responsável&lt;/<span class="t-sel">th</span>&gt;
+    &lt;/<span class="t-sel">tr</span>&gt;
+  &lt;/<span class="t-sel">thead</span>&gt;
+  &lt;<span class="t-sel">tbody</span>&gt;
+    &lt;<span class="t-sel">tr</span>&gt;
+      &lt;<span class="t-sel">td</span>&gt;PE 001/2026&lt;/<span class="t-sel">td</span>&gt;
+      &lt;<span class="t-sel">td</span>&gt;...badge...&lt;/<span class="t-sel">td</span>&gt;
+      &lt;<span class="t-sel">td</span>&gt;Laerty&lt;/<span class="t-sel">td</span>&gt;
+    &lt;/<span class="t-sel">tr</span>&gt;
+  &lt;/<span class="t-sel">tbody</span>&gt;
+&lt;/<span class="t-sel">table</span>&gt;</pre>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ══ 8. ALERTS ══ -->
+  <div class="section" id="alerts">
+    <div class="section-title">8 · Alertas / Feedback</div>
+    <div class="with-code">
+      <div class="preview-box">
+        <div class="its-alert alert-success">✓ Operação realizada com sucesso.</div>
+        <div class="its-alert alert-warning">⚠ Atenção: verifique os dados antes de continuar.</div>
+        <div class="its-alert alert-error">✕ Erro ao salvar. Tente novamente.</div>
+        <div class="its-alert alert-info">ℹ Os dados serão processados em até 24h.</div>
+      </div>
+      <div class="code-box">
+        <div class="code-top">
+          <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+          <span>HTML — Alertas</span>
+          <button class="copy-btn" onclick="copyCode(this)">copiar</button>
+        </div>
+        <pre>&lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"its-alert alert-success"</span>&gt;
+  ✓ Operação realizada com sucesso.
+&lt;/<span class="t-sel">div</span>&gt;
+
+&lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"its-alert alert-warning"</span>&gt;
+  ⚠ Atenção: verifique os dados.
+&lt;/<span class="t-sel">div</span>&gt;
+
+&lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"its-alert alert-error"</span>&gt;
+  ✕ Erro ao salvar. Tente novamente.
+&lt;/<span class="t-sel">div</span>&gt;
+
+&lt;<span class="t-sel">div</span> <span class="t-prop">class</span>=<span class="t-str">"its-alert alert-info"</span>&gt;
+  ℹ Dados processados em até 24h.
+&lt;/<span class="t-sel">div</span>&gt;</pre>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /kit-body -->
+
+<script>
+function copyCode(btn) {
+  const pre = btn.closest('.code-box').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.textContent = 'copiado ✓';
+    setTimeout(() => btn.textContent = 'copiar', 1800);
+  });
+}
+</script>
+</body>
+</html>

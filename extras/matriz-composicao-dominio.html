@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matriz de Composição por Domínio — LUMEN Integrado (Escopo Modular v1)</title>
+<style>
+  :root{
+    --bg:#0f1720; --panel:#16212e; --card:#1b2937; --line:#2a3a4c;
+    --text:#e7eef5; --muted:#9fb2c4; --accent:#183c5a; --accent2:#E85928;
+    --fundir:#2f6fed; --adotar:#1f9d57; --migrar:#e08600; --construir:#8a5cf0;
+    --consumir:#11a3a3; --satelite:#7a8aa0; --danger:#e0524f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 -apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  header{background:linear-gradient(135deg,#183c5a,#0f1720);padding:34px 40px;border-bottom:3px solid var(--accent2)}
+  header h1{margin:0 0 6px;font-size:24px}
+  header .sub{color:var(--muted);font-size:14px;max-width:900px}
+  header .meta{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  .pill{background:#0f1720;border:1px solid var(--line);color:var(--muted);padding:4px 12px;border-radius:20px;font-size:12px}
+  .pill.frozen{border-color:var(--accent2);color:#ffd9cb}
+  main{max-width:1180px;margin:0 auto;padding:30px 24px 80px}
+  section{margin-bottom:40px}
+  h2{font-size:19px;border-left:4px solid var(--accent2);padding-left:12px;margin:0 0 18px}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+  .badge{display:inline-block;padding:3px 11px;border-radius:5px;font-size:12px;font-weight:700;color:#fff;letter-spacing:.3px}
+  .b-fundir{background:var(--fundir)} .b-adotar{background:var(--adotar)}
+  .b-migrar{background:var(--migrar)} .b-construir{background:var(--construir)}
+  .b-consumir{background:var(--consumir)} .b-satelite{background:var(--satelite)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+  .card h3{margin:0 0 4px;font-size:16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .card .ext{font-size:11px;color:var(--muted);font-weight:400}
+  .card .decision{margin:10px 0;font-size:13px}
+  .card ul{margin:8px 0 0;padding-left:18px}
+  .card li{margin:3px 0;font-size:13.5px;color:#d3dde7}
+  .lbl{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.6px;margin-top:12px;display:block}
+  .nocopy{color:#ffc9c6}
+  code{background:#0d141d;padding:1px 5px;border-radius:4px;font-size:12px;color:#9fe0c9}
+  table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
+  th{background:#13202d;color:var(--muted);text-transform:uppercase;font-size:11px;letter-spacing:.5px}
+  tr:last-child td{border-bottom:none}
+  .freeze{background:linear-gradient(135deg,#1b2937,#16212e);border:1px solid var(--accent2);border-radius:10px;padding:22px 26px}
+  .freeze ul{margin:10px 0 0;padding-left:20px}
+  .freeze li{margin:7px 0}
+  .freeze strong{color:#ffd9cb}
+  .parecer-note{color:var(--muted);font-size:13px;margin-bottom:12px}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:24px;border-top:1px solid var(--line)}
+  @media print{body{background:#fff;color:#111}.card,table,.freeze{break-inside:avoid}header{background:#183c5a}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Matriz de Composição por Domínio — LUMEN Integrado</h1>
+  <div class="sub">Peça decisória do Escopo Modular v1. Para cada módulo: o que vem de cada origem, a decisão de composição e o que <b>não</b> copiar. Documento conceitual, sem ADR, sem plano técnico, sem código.</div>
+  <div class="meta">
+    <span class="pill frozen">Escopo Modular v1 — CONGELADO</span>
+    <span class="pill">Data: 2026-06-16</span>
+    <span class="pill">14 módulos canônicos</span>
+    <span class="pill">Pronto para ADR · não para código</span>
+  </div>
+</header>
+<main>
+
+  <section>
+    <h2>Legenda de decisão</h2>
+    <div class="legend">
+      <span><span class="badge b-fundir">fundir</span> domínio único a partir de várias fontes</span>
+      <span><span class="badge b-adotar">adotar</span> adotar capacidade, regra e teste de aceitação da fonte madura; reimplementar no padrão LUMEN (não copiar código)</span>
+      <span><span class="badge b-migrar">migrar</span> mesma capacidade, mudar de camada/storage</span>
+      <span><span class="badge b-construir">construir</span> greenfield</span>
+      <span><span class="badge b-consumir">consumir</span> fronteira externa por evento</span>
+      <span><span class="badge b-satelite">satélite</span> futuro, aguarda análise</span>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:6px"><b style="color:var(--text)">Vocabulário obrigatório:</b> "adotar" neste documento significa adotar capacidade, regra, contrato funcional e teste de aceitação da fonte madura. Não significa copiar código, runtime ou modelo de dados sem revisão arquitetural. Todo módulo com decisão "adotar" deve ser reimplementado no padrão LUMEN.</p>
+  </section>
+
+  <section>
+    <h2>Composição por módulo</h2>
+    <div class="grid">
+
+      <div class="card">
+        <h3>Core Platform <span class="badge b-fundir">fundir</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>Portal:</b> auth/sessão/token, RBAC granular, auditoria particionada, multi-tenancy por <code>company_id</code>.</li>
+          <li><b>SOGI:</b> matriz módulo×nível, module registry, rotação de refresh por jti, MFA (hoje stub).</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">identidade, acesso, isolamento por empresa, auditoria, registro de módulos, notificação in-app.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">fundir num único Core de plataforma. RBAC granular do Portal + matriz módulo×nível do SOGI. Trava: Core não contém regra de domínio.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">audit sem allowlist (R01); multi-tenancy sem enforcement (R02); <b style="color:#e0524f">decisão crítica pendente:</b> MFA funcional precisa ter tecnologia, política por perfil/risco e prazo definidos antes da expansão relevante de módulos sensíveis; lógica de negócio embutida no Core.</div>
+      </div>
+
+      <div class="card">
+        <h3>Documents <span class="badge b-fundir">fundir</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>Portal:</b> storage MinIO, anexos, vínculo a entidades de negócio.</li>
+          <li><b>SOGI:</b> modelo de versão e permissão por documento.</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">upload/download, versionamento, permissão por documento, evidências, exposição de arquivo para indexação externa.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">fundir storage do Portal com versão/permissão do SOGI. Documents publica o arquivo; NEXUS consome.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">RAG dentro do Documents; permissão de documento que diverge do RBAC central.</div>
+      </div>
+
+      <div class="card">
+        <h3>Financeiro / Controller <span class="badge b-fundir">fundir</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>Portal:</b> DRE atual, workflow financeiro, telas existentes.</li>
+          <li><b>Operation Insights:</b> fórmulas EBITDA/margem, OBZ (nuclei→packages→variables), plano de contas 1.x–5.x, operation_financials.</li>
+          <li><b>Sankhya:</b> origem ERP via erp_integration.</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">DRE, resultado por operação/contrato, OBZ, plano de contas, provisões, fechamento, integração ERP.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">fundir em domínio único. Fórmulas do Operation Insights como fonte de verdade. DRE é saída do Financeiro, não módulo à parte. Recebe agregado de RH, nunca folha nominal. Aprovações orçamentárias podem consumir HERMES futuramente; fora do escopo inicial se HERMES não estiver disponível.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">lógica financeira no frontend; anon key hardcoded; sessão Sankhya singleton; acesso direto a Supabase; cruzamento nominal com RH.</div>
+      </div>
+
+      <div class="card">
+        <h3>Licitações <span class="badge b-fundir">fundir</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>Portal:</b> fluxo/UI, certidões, favoritos.</li>
+          <li><b>Licita ITS:</b> filtro editorial (<code>isEditalLicitacao</code>, <code>matchesAnyKeyword</code>), keywords, ingestão PNCP/DOU, batch + retry 429.</li>
+          <li><b>NEXUS:</b> classificação semântica de edital (por evento).</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">monitoramento de oportunidades, filtro, keywords, certidões, alertas, classificação por IA.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">fundir filtro do Licita ITS com fluxo do Portal; classificação delegada ao NEXUS. Licitação termina onde o contrato começa (<code>edital.matched</code> → Contratos).</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">licença client-side do Licita ITS; agendador in-process que perde estado em crash; pipeline de IA reembutido no módulo.</div>
+      </div>
+
+      <div class="card">
+        <h3>Contratos <span class="badge b-fundir">fundir</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>Portal:</b> ciclo de vida, aditivos, vigências, alertas.</li>
+          <li><b>Operation Insights:</b> margem e resultado por contrato.</li>
+          <li><b>HERMES (futuro):</b> orquestração de aprovação (por evento).</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">contratos, aditivos, vigências/vencimentos, threshold de aprovação, resultado por contrato.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">fundir ciclo de vida do Portal Contratos + margem do Operation Insights + aprovação do HERMES (futuro) num domínio único. Origem por <code>edital.matched</code>; resultado postado ao Financeiro.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">workflow de aprovação in-process; acoplamento contrato↔licitação↔financeiro por JOIN; recálculo de margem que pertence ao Financeiro.</div>
+      </div>
+
+      <div class="card">
+        <h3>Work Management <span class="badge b-fundir">fundir</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>iTS Planejamento:</b> Kanban completo (KambanFlow), time tracking, workload, automação.</li>
+          <li><b>SOGI Projects:</b> WIP limit, projetos.</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">projetos, Kanban, checklists, time tracking, workload, automação de fluxo.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">fundir Kanban do iTS Planejamento (mais completo) + WIP/projetos do SOGI Projects num modelo Kanban único.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">SQL injection do legado iTS; dois modelos Kanban concorrentes; fusão de tarefa com chamado.</div>
+      </div>
+
+      <div class="card">
+        <h3>Chamados / Service Desk <span class="badge b-adotar">adotar</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>SOGI Tickets:</b> tickets, SLA engine (slaState derivado), filas, macros, categorização.</li>
+          <li><b>Comunicação:</b> canais de entrada (por <code>message.received</code>).</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">tickets, filas, SLA, macros, comentários, origem por canal.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">adotar capacidade, regra e teste de aceitação do SOGI; reimplementar no padrão LUMEN/Portal quando virar módulo real. SLA calcula aqui (não no HERMES no início). Gamificação fica fora por enquanto. Chamado pode virar tarefa por <code>ticket.escalated_to_task</code> (opcional).</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">acoplamento de SLA ao transporte de comms; lógica de trabalho interno que é do Work Management.</div>
+      </div>
+
+      <div class="card">
+        <h3>Comunicação / Canais <span class="badge b-adotar">adotar</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>SOGI:</b> e-mail (POP3/IMAP, AES-256-GCM), WhatsApp (Baileys + Meta), SMS, criação de chamado por canal.</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">transporte multicanal, envio/recebimento, entrega a módulos de negócio por evento.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">adotar capacidades e contratos funcionais de canais do SOGI; não copiar runtime/código sem revisão arquitetural. Tipo transversal operacional (alto risco: sessão, credenciais, retenção, LGPD). Integra com Service Desk por evento.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">sessão WhatsApp por empresa em disco sem redundância; lógica de chamado dentro do canal; segredo de mailbox sem cifra em repouso.</div>
+      </div>
+
+      <div class="card">
+        <h3>RH Operacional <span class="badge b-migrar">migrar</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>Operation Insights:</b> colaboradores, folha, atestados, ponto, admissionais.</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">cadastro de colaborador, folha, atestados, ponto, agregado de custo.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">migrar para server-side com controle de acesso a PII. Fornece só agregado anonimizado ao Financeiro. <b style="color:#e08600">Pendente de owner funcional</b> antes de detalhamento ou planejamento; risco LGPD/PII exige escopo mínimo de acesso por papel.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">folha/atestados em localStorage (LGPD crítico); cruzamento nominal com Financeiro; ausência de controle de acesso a PII.</div>
+      </div>
+
+      <div class="card">
+        <h3>Inventário / Patrimônio <span class="badge b-migrar">migrar</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>Operation Insights:</b> itens, depreciação, movimentações, vínculo financeiro.</li>
+          <li><b>Armazém (legado):</b> banco com inventário existente — fonte potencial para carga inicial ou integração pontual; sem acoplamento direto permanente; contrato de integração pendente de validação.</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">cadastro de bens, depreciação, movimentações, localização.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">migrar do Operation Insights. Referencia o Financeiro por evento (<code>asset.depreciated</code>). Banco do Armazém como fonte potencial de carga inicial; proibido acoplamento direto permanente ao Armazém; contrato de integração pendente de validação.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">acoplamento de depreciação ao plano de contas por JOIN; sobreposição com lançamento contábil.</div>
+      </div>
+
+      <div class="card">
+        <h3>Dashboard / BI <span class="badge b-construir">construir</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>Portal:</b> DashboardProvider, painéis executivos.</li>
+          <li><b>Operation Insights e iTS:</b> indicadores operacionais e de produtividade.</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">KPIs, read models por evento, painéis, exportações.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">construir sobre read models, reaproveitando KPIs e UX existentes. Read models projetados por evento de todos os domínios. Transversal.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">JOIN direto entre schemas de domínio (anti-padrão crítico do Portal hoje).</div>
+      </div>
+
+      <div class="card">
+        <h3>Training / EAD <span class="badge b-satelite">satélite/futuro</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>Portal ITS/EAD:</b> cursos, trilhas, avaliações, certificados (sem análise de fonte ainda).</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">capacitação, trilhas, certificados, matrículas.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">satélite/futuro, integrado por SSO. Entidades provisórias até análise dedicada. Capacidades descritas no anexo funcional são referenciais, não escopo aprovado; exigem análise dedicada antes de ADR.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">nada decidido ainda; aguarda mapeamento de fonte antes de detalhar. Stack PHP/MySQL divergente do LUMEN exige reescrita ou adaptação via API, não reaproveitamento direto.</div>
+      </div>
+
+      <div class="card">
+        <h3>NEXUS <span class="badge b-consumir">consumir</span><span class="ext">serviço externo</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>NEXUS:</b> RAG, embeddings, classificação, Evidence Pack, batch + retry 429 + fallback.</li>
+          <li><b>Licita ITS:</b> regras de match/keywords (fundidas na classificação de edital).</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">indexação semântica, classificação de edital/documento, Evidence Pack.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">consumir como serviço externo por contrato de API. Consome <code>document.uploaded</code>/<code>edital.found</code>; publica <code>edital.classified</code>/<code>document.indexed</code>.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">storage de arquivo dentro do NEXUS; persistência de entidade de negócio do LUMEN.</div>
+      </div>
+
+      <div class="card">
+        <h3>HERMES <span class="badge b-construir">construir/consumir</span><span class="ext">serviço externo</span></h3>
+        <span class="lbl">Vem de</span>
+        <ul>
+          <li><b>HERMES:</b> workflow multi-etapa, aprovações, timers, escalonamento (conceitual, greenfield).</li>
+        </ul>
+        <span class="lbl">Capacidades</span>
+        <div class="decision">orquestração de aprovação e escalonamento.</div>
+        <span class="lbl">Decisão</span>
+        <div class="decision">construir greenfield e consumir por evento. Recebe <code>*.approval_requested</code>; devolve <code>workflow.completed</code>/<code>workflow.escalated</code>.</div>
+        <span class="lbl">Não copiar</span>
+        <div class="decision nocopy">aprovações in-process do Portal; regra de domínio dentro do workflow.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Quadro-resumo: decisão por módulo</h2>
+    <table>
+      <thead><tr><th>Módulo</th><th>Decisão</th><th>Origem principal</th><th>Não copiar (top 1)</th></tr></thead>
+      <tbody>
+        <tr><td>Core Platform</td><td><span class="badge b-fundir">fundir</span></td><td>Portal + SOGI</td><td>audit sem allowlist (R01)</td></tr>
+        <tr><td>Documents</td><td><span class="badge b-fundir">fundir</span></td><td>Portal + SOGI</td><td>RAG embutido</td></tr>
+        <tr><td>Financeiro / Controller</td><td><span class="badge b-fundir">fundir</span></td><td>Portal + Operation Insights + Sankhya</td><td>lógica no frontend</td></tr>
+        <tr><td>Licitações</td><td><span class="badge b-fundir">fundir</span></td><td>Licita ITS + Portal + NEXUS</td><td>licença client-side</td></tr>
+        <tr><td>Contratos</td><td><span class="badge b-fundir">fundir</span></td><td>Portal + Operation Insights + HERMES (futuro)</td><td>aprovação in-process</td></tr>
+        <tr><td>Work Management</td><td><span class="badge b-fundir">fundir</span></td><td>iTS Planejamento + SOGI</td><td>SQL injection legado</td></tr>
+        <tr><td>Chamados / Service Desk</td><td><span class="badge b-adotar">adotar</span></td><td>SOGI Tickets</td><td>SLA acoplado ao canal</td></tr>
+        <tr><td>Comunicação / Canais</td><td><span class="badge b-adotar">adotar</span></td><td>SOGI</td><td>sessão WhatsApp sem redundância</td></tr>
+        <tr><td>RH Operacional</td><td><span class="badge b-migrar">migrar</span></td><td>Operation Insights</td><td>localStorage de PII</td></tr>
+        <tr><td>Inventário / Patrimônio</td><td><span class="badge b-migrar">migrar</span></td><td>Operation Insights</td><td>depreciação por JOIN</td></tr>
+        <tr><td>Dashboard / BI</td><td><span class="badge b-construir">construir</span></td><td>Portal + Operation Insights + iTS</td><td>JOIN entre schemas</td></tr>
+        <tr><td>Training / EAD</td><td><span class="badge b-satelite">satélite/futuro</span></td><td>Portal ITS/EAD</td><td>aguarda análise</td></tr>
+        <tr><td>NEXUS</td><td><span class="badge b-consumir">consumir</span></td><td>NEXUS + Licita ITS</td><td>storage de arquivo</td></tr>
+        <tr><td>HERMES</td><td><span class="badge b-construir">construir/consumir</span></td><td>greenfield</td><td>aprovação in-process</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Estado do escopo</h2>
+    <table>
+      <tbody>
+        <tr><td>Lista de módulos canônicos</td><td><b>Fechada</b></td></tr>
+        <tr><td>Tipos dos módulos</td><td><b>Fechado</b></td></tr>
+        <tr><td>Fronteiras principais</td><td><b>Fechadas</b></td></tr>
+        <tr><td>Fontes por capacidade</td><td><b>Fechadas</b></td></tr>
+        <tr><td>Conflitos principais</td><td><b>Fechados</b></td></tr>
+        <tr><td>Pendências menores</td><td><b>Decididas</b></td></tr>
+        <tr><td>Mapa de composição por domínio</td><td><b>Fechado (este documento)</b></td></tr>
+        <tr><td>Pronto para congelar como v1</td><td><b>Sim</b></td></tr>
+        <tr><td>Pronto para ADR</td><td><b>Sim</b></td></tr>
+        <tr><td>Pronto para código</td><td><b>Não</b></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Congelamento Conceitual v1</h2>
+    <div class="freeze">
+      Escopo Modular v1 do LUMEN Integrado congelado em 2026-06-16. Pontos de referência:
+      <ul>
+        <li><strong>LUMEN Integrado será um monólito modular</strong>, com módulos canônicos de negócio, fronteiras explícitas e contratos internos por evento.</li>
+        <li><strong>Portal é a base técnica provável</strong> (FastAPI, PostgreSQL, Alembic, MinIO, Celery, RBAC). Decisão a confirmar no primeiro ADR de plataforma.</li>
+        <li><strong>Os sistemas atuais são fontes de capacidades, não runtimes definitivos.</strong> Portal, SOGI, Operation Insights, Licita ITS, iTS Planejamento e Sankhya entram como origem de capacidade e dado, não como código a preservar tal como está.</li>
+        <li><strong>NEXUS é serviço externo de IA</strong>: RAG, embeddings, classificação e Evidence Pack. Nunca módulo interno.</li>
+        <li><strong>HERMES é serviço externo de workflow</strong>: aprovações, timers e escalonamento. Nunca módulo interno.</li>
+        <li><strong>Nenhum ADR ou código deve iniciar sem este escopo como referência.</strong> Este documento e seus companheiros (ESCOPO-MODULAR, DETALHAMENTO-FUNCIONAL) são a base de verdade do desenho.</li>
+        <li><strong>Escopo pronto para ADR, mas não pronto para código.</strong> A próxima etapa válida é o ADR de contrato por módulo, não implementação.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Parecer da equipe</h2>
+    <div class="parecer-note">Use a tabela abaixo para registrar o parecer por módulo. Marque concordância ou ponto de ajuste antes do início dos ADRs.</div>
+    <table>
+      <thead><tr><th style="width:22%">Módulo</th><th style="width:16%">Parecer (OK / ajustar)</th><th>Observação</th><th style="width:16%">Responsável</th></tr></thead>
+      <tbody>
+        <tr><td>Core Platform</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Documents</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Financeiro / Controller</td><td><b style="color:#e08600">ajustar</b></td><td>A variável de Inventário/Patrimônio deve alimentar as informações do Financeiro e Controller.</td><td>Diogo</td></tr>
+        <tr><td>Licitações</td><td><b style="color:#1f9d57">OK</b></td><td>&nbsp;</td><td>Diogo</td></tr>
+        <tr><td>Contratos</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Work Management</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Chamados / Service Desk</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Comunicação / Canais</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>RH Operacional</td><td><b style="color:#1f9d57">OK</b></td><td>&nbsp;</td><td>Diogo</td></tr>
+        <tr><td>Inventário / Patrimônio</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Dashboard / BI</td><td><b style="color:#1f9d57">OK</b></td><td>&nbsp;</td><td>Diogo</td></tr>
+        <tr><td>Training / EAD</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>NEXUS</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>HERMES</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+<footer>LUMEN Integrado · Escopo Modular v1 (congelado 2026-06-16) · documento conceitual para análise da equipe · sem ADR, sem código</footer>
+</body>
+</html>
