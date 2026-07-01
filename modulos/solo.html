@@ -28,8 +28,9 @@
     // CSS que esconde a moldura do Core (sidebar <aside> + topbar <header> de topo).
     // Injetado no documento do iframe; como é CSS, vale também para re-renders do React.
     var HIDE_CSS =
-      '[style*="100vh"] > aside{display:none!important}' +
-      '[style*="100vh"] > div > header{display:none!important}' +
+      '[style*="100vh"] > aside{display:none!important}' +      /* sidebar */
+      '[style*="100vh"] > div > header{display:none!important}' + /* topbar */
+      '[style*="1px 1px 1px 4px"]{display:none!important}' +      /* banner de avisos/notificações */
       'html,body{background:#f0f2f5!important}';
 
     function inject(){
