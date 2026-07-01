@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulo · LUMEN</title>
+<!-- Abre UM módulo do Core isolado (sem sidebar/topbar). Carrega o Core em iframe
+     (deep-link ?r=) e injeta CSS escondendo a "moldura". Fica em /modulos (sync-safe). -->
+<style>
+  html,body{height:100%;margin:0;background:#f0f2f5;font-family:Inter,system-ui,sans-serif}
+  #frame{position:fixed;inset:0;width:100%;height:100%;border:0;display:block}
+  #loading{position:fixed;inset:0;display:grid;place-items:center;color:#64748b;font:500 14px Inter,system-ui;z-index:1}
+  .back{position:fixed;left:16px;bottom:16px;z-index:9999;display:inline-flex;align-items:center;gap:8px;
+    background:#183c5a;color:#fff;font:600 13px/1 Inter,system-ui;text-decoration:none;
+    padding:10px 14px;border-radius:22px;box-shadow:0 6px 20px rgba(16,30,45,.28)}
+  .back:hover{background:#12314a}
+</style>
+</head>
+<body>
+  <div id="loading">Carregando módulo…</div>
+  <iframe id="frame" title="Módulo LUMEN"></iframe>
+  <a class="back" href="index.html">← Módulos</a>
+  <script>
+    var hashRoute = (location.hash || '').replace(/^#/, '').replace(/^r=/, '');
+    var route = new URLSearchParams(location.search).get('r') || hashRoute || 'dashboard';
+    var frame = document.getElementById('frame');
+
+    // CSS que esconde a moldura do Core (sidebar <aside> + topbar <header> de topo).
+    // Injetado no documento do iframe; como é CSS, vale também para re-renders do React.
+    var HIDE_CSS =
+      '[style*="100vh"] > aside{display:none!important}' +
+      '[style*="100vh"] > div > header{display:none!important}' +
+      'html,body{background:#f0f2f5!important}';
+
+    function inject(){
+      try{
+        var d = frame.contentDocument;
+        if(!d) return;
+        if(!d.getElementById('__solo_css')){
+          var s = d.createElement('style');
+          s.id = '__solo_css';
+          s.textContent = HIDE_CSS;
+          (d.head || d.documentElement).appendChild(s);
+        }
+      }catch(e){/* cross-origin não deve ocorrer (mesma origem) */}
+    }
+
+    frame.addEventListener('load', function(){
+      document.getElementById('loading').style.display = 'none';
+      inject();
+      // reforço: reinjeta por alguns segundos enquanto o Core monta/re-renderiza
+      var n = 0, t = setInterval(function(){ inject(); if(++n > 20) clearInterval(t); }, 250);
+    });
+
+    frame.src = '../core/?r=' + encodeURIComponent(route);
+  </script>
+</body>
+</html>

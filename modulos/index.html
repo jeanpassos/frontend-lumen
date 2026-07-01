@@ -44,6 +44,15 @@
   .card:hover .go{color:var(--orange)}.card:hover .go svg{transform:translateX(3px)}.go svg{transition:transform .16s}
   .card.sogi .go{color:var(--sogi)}
   .note{margin:8px 2px 0;font-size:12px;color:var(--muted2)}
+  .system{margin-top:8px;background:linear-gradient(135deg,#1d4468,#0f2942);color:#fff;border-radius:18px;padding:24px 26px;display:flex;align-items:center;gap:20px;box-shadow:0 14px 40px rgba(16,30,45,.22);transition:transform .16s,box-shadow .16s}
+  .system:hover{transform:translateY(-3px);box-shadow:0 22px 54px rgba(16,30,45,.32)}
+  .system .sic{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.1);display:grid;place-items:center;flex:none;color:#fff}
+  .system .stx{flex:1;min-width:0}
+  .system h3{margin:0 0 4px;font-size:19px;font-weight:800;letter-spacing:-.3px;color:#fff}
+  .system p{margin:0;font-size:13.5px;color:#c6d5e6}
+  .system .cta{display:inline-flex;align-items:center;gap:8px;background:var(--orange);color:#fff;font-weight:700;font-size:13.5px;padding:11px 18px;border-radius:24px;white-space:nowrap}
+  .system:hover .cta svg{transform:translateX(3px)}.system .cta svg{transition:transform .16s}
+  @media(max-width:640px){.system{flex-direction:column;align-items:flex-start;text-align:left}}
   @media(max-width:520px){.top{padding:22px 18px 88px}.stage{padding:0 16px 60px}}
 </style>
 </head>
@@ -69,24 +78,24 @@
   // grupos de módulos. img relativo a modulos/; href relativo a modulos/.
   const GROUPS = [
     { title: 'Plataforma · Core', modules: [
-      {n:'Dashboard', img:'core-dashboard', d:'Visão consolidada: KPIs, gráficos, saúde dos módulos e atividade recente.', href:'../core/?r=dashboard', o:'core'},
-      {n:'Navegação & menu', img:'core-navegacao', d:'Admin da barra lateral: ocultar, reordenar, renomear e gate por perfil (RBAC), ao vivo.', href:'../core/?r=navegacao', o:'core'},
-      {n:'Integrações', img:'core-integracoes', d:'Conexões externas M2M: WhatsApp (Baileys), SMTP, ERPs — com teste de conexão e logs.', href:'../core/?r=integracoes', o:'core'},
-      {n:'Níveis de acesso', img:'core-acessos', d:'RBAC granular: permissões modulo.recurso.acao por perfil, com MFA nas ações críticas.', href:'../core/?r=acessos', o:'core'},
-      {n:'Usuários', img:'core-usuarios', d:'Ficha 360° do colaborador: cadastro, acesso, atuação, RH, competências e análise.', href:'../core/?r=usuarios', o:'core'},
-      {n:'Cadastros', img:'core-cadastros', d:'Dados-mestres: empresas (com mapa do Brasil e visão 360°), filiais e fornecedores.', href:'../core/?r=cadastros', o:'core'},
-      {n:'Saúde dos serviços', img:'core-servicos', d:'Monitor de containers Docker: status, latência e ações operacionais.', href:'../core/?r=servicos', o:'core'},
-      {n:'Configurações', img:'core-config', d:'Preferências da plataforma: tela de login, aparência e avisos & comunicados.', href:'../core/?r=config', o:'core'},
-      {n:'@lumen/ui', img:'core-ui', d:'Galeria do design system: componentes, padrões e tokens do LUMEN.', href:'../core/?r=ui', o:'core'},
+      {n:'Dashboard', img:'core-dashboard', d:'Visão consolidada: KPIs, gráficos, saúde dos módulos e atividade recente.', href:'solo.html#dashboard', o:'core'},
+      {n:'Navegação & menu', img:'core-navegacao', d:'Admin da barra lateral: ocultar, reordenar, renomear e gate por perfil (RBAC), ao vivo.', href:'solo.html#navegacao', o:'core'},
+      {n:'Integrações', img:'core-integracoes', d:'Conexões externas M2M: WhatsApp (Baileys), SMTP, ERPs — com teste de conexão e logs.', href:'solo.html#integracoes', o:'core'},
+      {n:'Níveis de acesso', img:'core-acessos', d:'RBAC granular: permissões modulo.recurso.acao por perfil, com MFA nas ações críticas.', href:'solo.html#acessos', o:'core'},
+      {n:'Usuários', img:'core-usuarios', d:'Ficha 360° do colaborador: cadastro, acesso, atuação, RH, competências e análise.', href:'solo.html#usuarios', o:'core'},
+      {n:'Cadastros', img:'core-cadastros', d:'Dados-mestres: empresas (com mapa do Brasil e visão 360°), filiais e fornecedores.', href:'solo.html#cadastros', o:'core'},
+      {n:'Saúde dos serviços', img:'core-servicos', d:'Monitor de containers Docker: status, latência e ações operacionais.', href:'solo.html#servicos', o:'core'},
+      {n:'Configurações', img:'core-config', d:'Preferências da plataforma: tela de login, aparência e avisos & comunicados.', href:'solo.html#config', o:'core'},
+      {n:'@lumen/ui', img:'core-ui', d:'Galeria do design system: componentes, padrões e tokens do LUMEN.', href:'solo.html#ui', o:'core'},
     ]},
     { title: 'Negócio · Core', modules: [
-      {n:'Financeiro', img:'core-financeiro', d:'Indicadores financeiros e demonstrativo tipo DRE.', href:'../core/?r=financeiro', o:'core'},
-      {n:'Contratos', img:'core-contratos', d:'Gestão de contratos com drill-in e estados (carregando, vazio, erro, forbidden).', href:'../core/?r=contratos', o:'core'},
-      {n:'Documents', img:'core-documents', d:'Repositório de documentos com versão e permissão por documento.', href:'../core/?r=documents', o:'core'},
-      {n:'Licitações', img:'core-licitacoes', d:'Editais com status de match e acompanhamento.', href:'../core/?r=licitacoes', o:'core'},
-      {n:'Inventário', img:'core-inventario', d:'Ativos e patrimônio da operação.', href:'../core/?r=inventario', o:'core'},
-      {n:'Training / EAD', img:'core-training', d:'Trilhas de treinamento e capacitação da equipe.', href:'../core/?r=training', o:'core'},
-      {n:'Work Management', img:'core-work', d:'Kanban, checklists, time tracking, workload (Gantt) e automação.', href:'../core/?r=work', o:'core'},
+      {n:'Financeiro', img:'core-financeiro', d:'Indicadores financeiros e demonstrativo tipo DRE.', href:'solo.html#financeiro', o:'core'},
+      {n:'Contratos', img:'core-contratos', d:'Gestão de contratos com drill-in e estados (carregando, vazio, erro, forbidden).', href:'solo.html#contratos', o:'core'},
+      {n:'Documents', img:'core-documents', d:'Repositório de documentos com versão e permissão por documento.', href:'solo.html#documents', o:'core'},
+      {n:'Licitações', img:'core-licitacoes', d:'Editais com status de match e acompanhamento.', href:'solo.html#licitacoes', o:'core'},
+      {n:'Inventário', img:'core-inventario', d:'Ativos e patrimônio da operação.', href:'solo.html#inventario', o:'core'},
+      {n:'Training / EAD', img:'core-training', d:'Trilhas de treinamento e capacitação da equipe.', href:'solo.html#training', o:'core'},
+      {n:'Work Management', img:'core-work', d:'Kanban, checklists, time tracking, workload (Gantt) e automação.', href:'solo.html#work', o:'core'},
     ]},
     { title: 'Reutilizados do SOGI', badge: '♻ do projeto SOGI', modules: [
       {n:'Projetos', img:'sogi-projetos', d:'Portfólio de projetos com status, progresso e workspace por projeto.', href:'embed.html#projetos', o:'sogi'},
@@ -96,7 +105,7 @@
       {n:'Gamificação', img:'sogi-gamificacao', d:'Engajamento: pontos por prazo, SLA, qualidade e colaboração; ranking.', href:'embed.html#gamificacao', o:'sogi'},
     ]},
     { title: 'Serviço externo', modules: [
-      {n:'NEXUS · HERMES', img:'core-nexus', d:'Serviço externo de IA: RAG, classificação e roteamento inteligente.', href:'../core/?r=nexus', o:'ext'},
+      {n:'NEXUS · HERMES', img:'core-nexus', d:'Serviço externo de IA: RAG, classificação e roteamento inteligente.', href:'solo.html#nexus', o:'ext'},
     ]},
   ];
 
@@ -113,7 +122,7 @@
       const a = document.createElement('a');
       a.className = 'card' + (m.o==='sogi'?' sogi':'');
       a.href = m.href;
-      if (m.href.startsWith('../core') || m.href.startsWith('embed')) { a.target = '_blank'; a.rel = 'noopener'; }
+      a.target = '_blank'; a.rel = 'noopener';
       a.innerHTML =
         '<div class="thumb"><span class="origin '+m.o+'">'+OLABEL[m.o]+'</span>'+
           '<img loading="lazy" src="img/'+m.img+'.png" alt="Módulo '+m.n+'"></div>'+
@@ -123,6 +132,20 @@
     });
     stage.appendChild(grid);
   });
+
+  // Card final: acessar o SISTEMA INTEIRO (Core completo, com sidebar/login)
+  const sysSec = document.createElement('div');
+  sysSec.className = 'sec';
+  sysSec.innerHTML = '<h2>Plataforma completa</h2><span class="line"></span>';
+  stage.appendChild(sysSec);
+  const sys = document.createElement('a');
+  sys.className = 'system';
+  sys.href = '../core/'; sys.target = '_blank'; sys.rel = 'noopener';
+  sys.innerHTML =
+    '<div class="sic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>'+
+    '<div class="stx"><h3>Acessar o sistema inteiro</h3><p>Abra o LUMEN Core completo — com login, sidebar, topbar e todos os módulos integrados numa só experiência.</p></div>'+
+    '<span class="cta">Abrir o LUMEN Core '+ARROW+'</span>';
+  stage.appendChild(sys);
   </script>
 </body>
 </html>
