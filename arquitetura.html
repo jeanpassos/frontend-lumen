@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arquitetura &amp; Documentação — LUMEN · ITSCS</title>
+<meta name="description" content="Arquitetura do LUMEN: Core Platform + módulos independentes, contratos fortes e evolução gradual.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#183c5a;--navy2:#0f2942;--orange:#E85928;--blue:#2f6fed;--sogi:#7c3aed;--bg:#f0f2f5;--card:#fff;--border:#e3e7ec;--strong:#1f2937;--text:#374151;--muted:#6b7280;--muted2:#9aa6b4;--ok:#1f9d57;--danger:#c0413f}
+  *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+  a{color:inherit;text-decoration:none}.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--orange);margin:0 0 12px}
+  h2{font-size:clamp(23px,3.2vw,36px);line-height:1.1;letter-spacing:-.8px;font-weight:800;color:var(--strong);margin:0 0 14px}
+  .lead{font-size:clamp(15px,1.7vw,18px);color:var(--muted);max-width:64ch;margin:0}
+  section{padding:64px 0;border-top:1px solid var(--border)}
+  section:first-of-type{border-top:0}
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+  .reveal.in{opacity:1;transform:none}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(to right,var(--orange),var(--blue));width:0;z-index:100}
+
+  /* hero */
+  .hero{background:radial-gradient(1100px 500px at 82% -10%,rgba(46,111,237,.2),transparent 55%),linear-gradient(160deg,var(--navy),var(--navy2));color:#eaf1f8;padding:26px 24px 84px;position:relative}
+  .hero::after{content:"";position:absolute;inset:auto 0 -1px 0;height:64px;background:linear-gradient(to bottom,transparent,var(--bg))}
+  .crumbs{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#9db4cc;margin-bottom:22px}
+  .crumbs a{color:#c6d5e6;font-weight:600}.crumbs a:hover{color:#fff}
+  .hero h1{font-size:clamp(28px,4.4vw,48px);line-height:1.05;letter-spacing:-1.2px;font-weight:900;color:#fff;margin:0 0 14px;max-width:20ch}
+  .hero p{font-size:clamp(15px,1.8vw,19px);color:#c6d5e6;max-width:62ch;margin:0}
+  .heroquote{margin-top:26px;border-left:3px solid var(--orange);padding:4px 0 4px 18px;color:#dbe6f2;font-size:15px;max-width:64ch}
+  .heroquote b{color:#fff}
+
+  /* pieces (4 componentes) */
+  .grid4{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:26px}
+  .piece{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:20px;box-shadow:0 6px 18px rgba(16,30,45,.05)}
+  .piece .tag{font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:3px 9px;border-radius:20px;display:inline-block;margin-bottom:12px}
+  .piece.core .tag{background:#eaf0f6;color:var(--navy)}
+  .piece.mod .tag{background:#e9f1ff;color:var(--blue)}
+  .piece.ext .tag{background:#fdf2e0;color:#b06a00}
+  .piece h3{margin:0 0 6px;font-size:16.5px;color:var(--strong);font-weight:700}
+  .piece p{margin:0;font-size:13px;color:var(--muted)}
+
+  /* tabs (3 artefatos) */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 18px}
+  .tab{font:600 13.5px Inter,system-ui;padding:9px 16px;border-radius:22px;border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;transition:.15s}
+  .tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .panel{display:none;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;box-shadow:0 8px 24px rgba(16,30,45,.06)}
+  .panel.on{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .panel h3{margin:0 0 4px;font-size:19px;color:var(--strong);letter-spacing:-.3px}
+  .panel .sub{font-size:13px;color:var(--muted2);margin:0 0 16px}
+  .panel .code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue);background:#f4f7fb;padding:2px 7px;border-radius:6px}
+  .taglist{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .taglist span{font-size:12px;font-weight:500;color:#475569;background:#eef1f5;border:1px solid var(--border);padding:5px 11px;border-radius:8px}
+
+  /* fornece / não contém */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  @media(max-width:720px){.two{grid-template-columns:1fr}}
+  .col{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:22px;box-shadow:0 6px 18px rgba(16,30,45,.05)}
+  .col h4{margin:0 0 14px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .col.yes h4{color:var(--ok)}.col.no h4{color:var(--danger)}
+  .col ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+  .col li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--text)}
+  .col .ic{flex:none;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-weight:800;font-size:12px;margin-top:1px}
+  .col.yes .ic{background:#e6f6ed;color:var(--ok)}.col.no .ic{background:#fdeceb;color:var(--danger)}
+
+  /* chips modularidade */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .chips span{font-size:13px;font-weight:600;color:var(--navy);background:#fff;border:1px solid var(--border);padding:9px 15px;border-radius:10px;box-shadow:0 3px 10px rgba(16,30,45,.04)}
+  .chips span b{color:var(--orange)}
+
+  /* contratos */
+  .contr{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+  @media(max-width:720px){.contr{grid-template-columns:1fr}}
+  .contr .box{border-radius:15px;padding:20px}
+  .contr .ok{background:#f0f9f4;border:1px solid #cdeede}
+  .contr .no{background:#fdf3f2;border:1px solid #f6d9d6}
+  .contr h4{margin:0 0 12px;font-size:13.5px;font-weight:700}
+  .contr .ok h4{color:var(--ok)}.contr .no h4{color:var(--danger)}
+  .contr ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:13px}
+  .contr .no ul{color:#8a4b48}.contr .ok ul{color:#356b52}
+
+  /* donos de domínio */
+  .owners{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:22px}
+  .owner{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;box-shadow:0 4px 12px rgba(16,30,45,.04)}
+  .owner b{color:var(--strong);font-size:14.5px}
+  .owner span{display:block;font-size:12.5px;color:var(--muted);margin-top:3px}
+
+  /* fase */
+  .stack{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+  .stack span{font-family:'JetBrains Mono',monospace;font-size:12px;color:#334155;background:#fff;border:1px solid var(--border);padding:7px 12px;border-radius:8px}
+  .phase-note{margin-top:18px;background:#eef4fb;border:1px solid #d6e4f5;border-radius:12px;padding:16px 18px;font-size:13.5px;color:#33546f}
+  .phase-note b{color:var(--navy)}
+
+  .linkmore{display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--navy);font-size:14px;margin-top:8px}
+  .linkmore:hover{color:var(--orange)}
+  .cta{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#eaf1f8;border-top:0}
+  .cta h2{color:#fff}.cta .lead{color:#c6d5e6}
+  .btnrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:14px;padding:13px 22px;border-radius:26px}
+  .btn.primary{background:var(--orange);color:#fff}
+  .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25)}
+
+  /* === TV / telas grandes: adapta e amplia (sem zoom) === */
+  @media(min-width:1600px){
+    .wrap{max-width:1280px}
+    .hero h1{font-size:clamp(28px,4.4vw,60px)}
+    h2{font-size:clamp(23px,3.2vw,46px)}
+    .lead,.hero p{font-size:20px}
+    .piece h3,.owner b{font-size:18px}
+    .piece p,.col li,.owner span,.chips span,.stack span,.taglist span{font-size:15px}
+    .tab{font-size:15px}
+    .panel h3{font-size:22px}
+  }
+  @media(min-width:2560px){.wrap{max-width:1700px}}
+</style>
+</head>
+<body>
+<div class="progress" id="pb"></div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">LUMEN</a> <span>›</span> <span>Arquitetura &amp; documentação</span></div>
+    <h1>Arquitetura Core + módulos.</h1>
+    <p>Não é monolito acoplado nem microserviço improvisado. É uma plataforma modular com contratos fortes, governança e evolução gradual — resumo do documento de arquitetura do LUMEN.</p>
+    <div class="heroquote">“O LUMEN não deve voltar ao modelo de monolito acoplado. A arquitetura-alvo é <b>Core Platform + módulos independentes</b>, com contratos fortes, governança obrigatória e evolução gradual.”</div>
+  </div>
+</header>
+
+<!-- 4 componentes -->
+<section>
+  <div class="wrap reveal">
+    <p class="eyebrow">A composição</p>
+    <h2>Quatro peças, papéis claros.</h2>
+    <p class="lead">A plataforma é composta por um Core que entrega o transversal, módulos de negócio autônomos e dois serviços externos de IA e workflow.</p>
+    <div class="grid4">
+      <div class="piece core"><span class="tag">Plataforma</span><h3>LUMEN Core</h3><p>Identidade, autenticação, RBAC, multiempresa, registry de módulos, menu dinâmico, layout, auditoria e governança.</p></div>
+      <div class="piece mod"><span class="tag">Módulo · Docker</span><h3>Módulos independentes</h3><p>Domínios autônomos: API, Git, Docker e banco próprios. Financeiro, Contratos, Service Desk, Documents…</p></div>
+      <div class="piece ext"><span class="tag">Serviço externo</span><h3>NEXUS</h3><p>IA: RAG, memória, embeddings, classificação, Evidence Pack e governança cognitiva.</p></div>
+      <div class="piece ext"><span class="tag">Serviço externo</span><h3>HERMES</h3><p>Workflows auditáveis: aprovações multi-etapa, timers, retry, compensação e DLQ.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 artefatos do Core (tabs) -->
+<section>
+  <div class="wrap reveal">
+    <p class="eyebrow">Dentro do Core</p>
+    <h2>Três artefatos, ciclos de vida diferentes.</h2>
+    <p class="lead">O Core não é uma coisa só. São três artefatos independentes — não confundir: a API, o shell e o kit de componentes.</p>
+    <div class="tabs">
+      <button class="tab on" data-t="api">Core API</button>
+      <button class="tab" data-t="front">Core Frontend</button>
+      <button class="tab" data-t="ui">@lumen/ui</button>
+    </div>
+    <div class="panel on" id="p-api">
+      <h3>Core API <span class="code">lumen-core (backend)</span></h3>
+      <p class="sub">Serviço que roda como container. A fonte da verdade de acesso.</p>
+      <p style="margin:0;font-size:14px;color:var(--text)">Responsável por autenticação, autorização, RBAC, multiempresa, registry de módulos, auditoria, roteamento de notificações, configurações globais e service accounts. Expõe endpoints HTTP consumidos pelos módulos e pelo Core Frontend.</p>
+    </div>
+    <div class="panel" id="p-front">
+      <h3>Core Frontend <span class="code">lumen-core (frontend)</span></h3>
+      <p class="sub">O shell da plataforma.</p>
+      <p style="margin:0;font-size:14px;color:var(--text)">Login, layout, sidebar, topbar, menu dinâmico e roteamento entre módulos. <b>Não</b> contém componentes de domínio nem lógica de negócio. Consome o <span class="code">@lumen/ui</span> como dependência de pacote.</p>
+    </div>
+    <div class="panel" id="p-ui">
+      <h3>@lumen/ui <span class="code">pacote de componentes</span></h3>
+      <p class="sub">O kit reutilizável — consumido pelo Core e por todos os módulos.</p>
+      <p style="margin:0 0 4px;font-size:14px;color:var(--text)">Biblioteca de componentes visuais, publicada como pacote NPM interno. Sem dependência do Core API em runtime.</p>
+      <div class="taglist"><span>Button</span><span>Input</span><span>Select</span><span>Table</span><span>DataGrid</span><span>Modal</span><span>Drawer</span><span>Kanban</span><span>KpiCard</span><span>ChartCard</span><span>Timeline</span><span>StatusBadge</span><span>PermissionGuard</span><span>PageHeader</span><span>FilterBar</span><span>FileUploader</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Core faz / não faz -->
+<section>
+  <div class="wrap reveal">
+    <p class="eyebrow">A fronteira</p>
+    <h2>O Core é plataforma, não negócio.</h2>
+    <p class="lead">O que é comum a todos vive no Core. Regra de domínio nunca entra nele — isso é dos módulos.</p>
+    <div class="two">
+      <div class="col yes">
+        <h4>✓ O Core fornece</h4>
+        <ul>
+          <li><span class="ic">✓</span> Identidade, autenticação e autorização</li>
+          <li><span class="ic">✓</span> Multiempresa e matriz de permissões</li>
+          <li><span class="ic">✓</span> Registro de módulos e menu dinâmico</li>
+          <li><span class="ic">✓</span> Auditoria, rastreabilidade e <span class="mono">correlation_id</span></li>
+          <li><span class="ic">✓</span> Configurações globais e contratos de integração</li>
+          <li><span class="ic">✓</span> Governança técnica e base para alta disponibilidade</li>
+        </ul>
+      </div>
+      <div class="col no">
+        <h4>✕ O Core NÃO contém</h4>
+        <ul>
+          <li><span class="ic">✕</span> Regra financeira, de contrato ou de licitação</li>
+          <li><span class="ic">✕</span> Lógica de SLA, de chamado ou de RH</li>
+          <li><span class="ic">✕</span> Cálculo de margem ou de folha</li>
+          <li><span class="ic">✕</span> Lógica de IA transacional</li>
+          <li><span class="ic">✕</span> Acesso direto ao banco interno de um módulo</li>
+          <li><span class="ic">✕</span> Componentes visuais de domínio (esses são do <span class="mono">@lumen/ui</span>)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- modularidade real -->
+<section>
+  <div class="wrap reveal">
+    <p class="eyebrow">O princípio central</p>
+    <h2>Modularidade real.</h2>
+    <p class="lead">Cada módulo é independente — de verdade. Não depende de tabela, migration, service, model ou regra de outro módulo.</p>
+    <div class="chips">
+      <span><b>·</b> Código-fonte</span><span><b>·</b> Repositório Git</span><span><b>·</b> Docker</span><span><b>·</b> API</span><span><b>·</b> Banco de dados</span><span><b>·</b> Migrations</span><span><b>·</b> Permissões</span><span><b>·</b> Eventos</span><span><b>·</b> Configurações</span><span><b>·</b> Deploy</span><span><b>·</b> Testes</span><span><b>·</b> Observabilidade</span>
+    </div>
+  </div>
+</section>
+
+<!-- contratos fortes -->
+<section>
+  <div class="wrap reveal">
+    <p class="eyebrow">Como se comunicam</p>
+    <h2>Contratos fortes entre módulos.</h2>
+    <p class="lead">A conversa entre Core e módulos passa por contrato explícito — nunca por atalho no banco.</p>
+    <div class="contr">
+      <div class="box ok">
+        <h4>✓ Permitido</h4>
+        <ul><li>API HTTP interna versionada</li><li>Eventos, webhooks internos e filas</li><li>Contratos OpenAPI</li><li>Schemas de payload versionados</li></ul>
+      </div>
+      <div class="box no">
+        <h4>✕ Proibido</h4>
+        <ul><li><span class="mono">JOIN</span> direto entre bancos de módulos</li><li>Leitura direta de tabela de outro módulo</li><li>Import de código interno de outro módulo</li><li>Endpoint não documentado / contrato verbal</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- donos de domínio -->
+<section>
+  <div class="wrap reveal">
+    <p class="eyebrow">Separação de responsabilidades</p>
+    <h2>Cada módulo é dono do seu domínio.</h2>
+    <div class="owners">
+      <div class="owner"><b>Financeiro</b><span>DRE, plano de contas, fechamento e resultado</span></div>
+      <div class="owner"><b>Contratos</b><span>contratos, aditivos e vigências</span></div>
+      <div class="owner"><b>Licitações</b><span>editais, certidões, oportunidades e matching</span></div>
+      <div class="owner"><b>Service Desk</b><span>chamados, filas, SLA, macros e base de conhecimento</span></div>
+      <div class="owner"><b>RH</b><span>colaboradores, ponto, folha e atestados</span></div>
+      <div class="owner"><b>Inventário</b><span>bens, depreciação e movimentação</span></div>
+      <div class="owner"><b>Documents</b><span>arquivos, versões, metadados e permissões</span></div>
+      <div class="owner"><b>NEXUS</b><span>IA, RAG, memória e Evidence Pack</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- evolução gradual -->
+<section>
+  <div class="wrap reveal">
+    <p class="eyebrow">Evolução gradual</p>
+    <h2>Começar simples, crescer com segurança.</h2>
+    <p class="lead">A primeira fase roda com um stack enxuto — banco separado por módulo numa mesma instância PostgreSQL — e evolui sob checklist.</p>
+    <div class="stack">
+      <span>PostgreSQL (1 instância)</span><span>banco por módulo</span><span>Docker Compose</span><span>Nginx / Traefik</span><span>Redis</span><span>MinIO</span><span>workers</span><span>RabbitMQ / Redis Streams</span><span>HML obrigatório</span>
+    </div>
+    <div class="phase-note"><b>Fase 0 obrigatória:</b> governança e scaffold antes de escalar módulos. A modularidade não autoriza microserviços caóticos — cresce sob contrato e checklist de deploy.</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap reveal">
+    <p class="eyebrow" style="color:#ffb59b">Aprofundar</p>
+    <h2>Este é o resumo.</h2>
+    <p class="lead">O documento completo (v0.3) traz banco de dados, segurança, observabilidade, deploy gradual, ADRs e a integração NEXUS/HERMES em detalhe.</p>
+    <div class="btnrow">
+      <a class="btn primary" href="https://github.com/jeanpassos/frontend-lumen/tree/main/docs" target="_blank" rel="noopener">Documento completo no GitHub <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn ghost" href="apresentacao/">Voltar à apresentação</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // tabs
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+      document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+      t.classList.add('on');
+      document.getElementById('p-'+t.dataset.t).classList.add('on');
+    });
+  });
+  // reveal
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  } else { document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');}); }
+  // progress
+  var pb=document.getElementById('pb');
+  addEventListener('scroll',function(){var h=document.documentElement;pb.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';},{passive:true});
+</script>
+</body>
+</html>
