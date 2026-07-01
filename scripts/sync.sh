@@ -59,6 +59,9 @@ cp "$SRC/Apresentação LUMEN Core.dc.html" "$ROOT/core/apresentacao.html"
 cp "$SRC/Pager.dc.html"                   "$ROOT/core/pager.html"
 cp "$SRC/support.js" "$SRC/deck-stage.js" "$SRC/image-slot.js" "$ROOT/core/"
 cp -r "$SRC/screenshots"                   "$ROOT/core/screenshots"
+# patch: deep-link do Core por ?r=<rota> — abre direto num módulo (pula o login).
+# usado pela galeria em modulos/. Reaplicado a cada sync porque o Core é regenerado do design.
+sed -i "s/route:'login', company:0,/route:(new URLSearchParams(location.search).get('r')||'login'), company:0,/" "$ROOT/core/index.html"
 
 # --- modules/sogi ---
 mkdir -p "$ROOT/modules/sogi"

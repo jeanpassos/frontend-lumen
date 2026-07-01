@@ -4104,7 +4104,7 @@ class Component extends DCLogic {
   constructor(props) {
     super(props);
     this.state = {
-      route:'login', company:0, companyOpen:false, notifOpen:false,
+      route:(new URLSearchParams(location.search).get('r')||'login'), company:0, companyOpen:false, notifOpen:false,
       contratosState:'ok', contratoView:'list', selected:0,
       drawerOpen:false, confirmOpen:false, justAdded:null, configSection:'geral', collapsed:false, workTab:'kanban', mapHover:null, uiTab:'visao', uiCat:'base',
       openProject:null, projTab:'visao', flow:{}, flowToast:false, openCad:null, userMenuOpen:false, acctOpen:false, acctTab:'perfil', acctForm:{nome:'Diogo Martins', email:'diogo.martins@itscs.com.br', cargo:'Gestor', tel:'(16) 99999-0000', notif:{email:true,push:true,wpp:false,resumo:true}}, acctPw:{atual:'',nova:'',conf:''},

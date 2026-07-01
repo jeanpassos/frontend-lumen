@@ -7,38 +7,44 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--navy:#183c5a;--navy2:#0f2942;--orange:#E85928;--blue:#2f6fed;--bg:#f0f2f5;--card:#fff;--border:#e3e7ec;--strong:#1f2937;--text:#374151;--muted:#6b7280;--muted2:#9aa6b4}
+  :root{--navy:#183c5a;--navy2:#0f2942;--orange:#E85928;--blue:#2f6fed;--bg:#f0f2f5;--card:#fff;--border:#e3e7ec;--strong:#1f2937;--text:#374151;--muted:#6b7280;--muted2:#9aa6b4;--sogi:#7c3aed}
   *{box-sizing:border-box}html,body{margin:0}
   body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   a{text-decoration:none;color:inherit}.mono{font-family:'JetBrains Mono',monospace}
   .top{background:radial-gradient(1000px 420px at 12% -20%,rgba(46,111,237,.18),transparent 60%),linear-gradient(160deg,var(--navy),var(--navy2));color:#eaf1f8;padding:26px 24px 96px;position:relative}
   .top::after{content:"";position:absolute;inset:auto 0 -1px 0;height:76px;background:linear-gradient(to bottom,transparent,var(--bg))}
-  .wrap{max-width:1120px;margin:0 auto}
+  .wrap{max-width:1180px;margin:0 auto}
   .crumbs{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#9db4cc;margin-bottom:20px}
   .crumbs a{color:#c6d5e6;font-weight:600}.crumbs a:hover{color:#fff}
-  .top h1{margin:0 0 8px;font-size:clamp(25px,3.6vw,36px);letter-spacing:-.9px;font-weight:800;color:#fff}
-  .top p{margin:0;max-width:64ch;color:#c6d5e6;font-size:14.5px}
-  .stage{max-width:1120px;margin:-66px auto 0;padding:0 24px 72px;position:relative;z-index:2}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
-  .card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(16,30,45,.04),0 10px 26px rgba(16,30,45,.07);transition:transform .18s,box-shadow .18s,border-color .18s}
-  .card:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(16,30,45,.05),0 20px 44px rgba(16,30,45,.14);border-color:#d3dbe4}
-  .thumb{aspect-ratio:16/9;overflow:hidden;background:#eef1f5;border-bottom:1px solid var(--border);position:relative}
+  .top h1{margin:0 0 8px;font-size:clamp(25px,3.6vw,38px);letter-spacing:-.9px;font-weight:800;color:#fff}
+  .top p{margin:0;max-width:70ch;color:#c6d5e6;font-size:14.5px}
+  .top .stat{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+  .pill{font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.15);color:#dbe6f2}
+  .pill b{color:#fff}
+  .stage{max-width:1180px;margin:-66px auto 0;padding:0 24px 80px;position:relative;z-index:2}
+  .sec{display:flex;align-items:center;gap:10px;margin:34px 4px 14px}
+  .sec h2{margin:0;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted2)}
+  .sec .line{flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent)}
+  .sec .badge{font-size:11px;font-weight:700;color:var(--sogi);background:#f3ecff;border:1px solid #e5d8ff;padding:3px 9px;border-radius:20px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:15px;overflow:hidden;box-shadow:0 1px 2px rgba(16,30,45,.04),0 10px 24px rgba(16,30,45,.06);transition:transform .16s,box-shadow .16s,border-color .16s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 2px 4px rgba(16,30,45,.05),0 18px 40px rgba(16,30,45,.13);border-color:#d3dbe4}
+  .card.sogi{border-color:#e5d8ff}
+  .thumb{aspect-ratio:16/10;overflow:hidden;background:#eef1f5;border-bottom:1px solid var(--border);position:relative}
   .thumb img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;transition:transform .3s}
   .card:hover .thumb img{transform:scale(1.03)}
-  .count{position:absolute;left:12px;bottom:12px;font-size:11px;font-weight:700;color:#fff;background:rgba(15,41,66,.82);backdrop-filter:blur(4px);padding:5px 10px;border-radius:20px}
-  .body{padding:16px 18px 18px}
-  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
-  .body h3{margin:0;font-size:17px;font-weight:700;color:var(--strong);letter-spacing:-.2px}
-  .seal{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:4px 9px;border-radius:20px;white-space:nowrap}
-  .seal.mod{background:#e9f1ff;color:var(--blue)}
-  .seal.src{background:#eef1f5;color:#475569}
-  .seal.soon{background:#fdf2e0;color:#b06a00}
-  .body p{margin:0;font-size:13px;color:var(--muted);line-height:1.5}
-  .go{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:13px;font-weight:600;color:var(--navy)}
-  .card:hover .go{color:var(--orange)}.card:hover .go svg{transform:translateX(3px)}.go svg{transition:transform .18s}
-  .ph{display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;background:repeating-linear-gradient(45deg,#f4f6f9,#f4f6f9 12px,#eef1f5 12px,#eef1f5 24px);color:#aab4c2;border-bottom:1px solid var(--border)}
-  .card.dashed{border-style:dashed;box-shadow:none}
-  @media(max-width:520px){.top{padding:22px 18px 88px}.stage{padding:0 16px 56px}}
+  .origin{position:absolute;left:10px;top:10px;font-size:10px;font-weight:700;letter-spacing:.3px;padding:4px 9px;border-radius:20px;backdrop-filter:blur(6px)}
+  .origin.core{background:rgba(24,60,90,.86);color:#fff}
+  .origin.sogi{background:rgba(124,58,237,.9);color:#fff}
+  .origin.ext{background:rgba(176,106,0,.9);color:#fff}
+  .body{padding:14px 16px 16px}
+  .body h3{margin:0 0 5px;font-size:15.5px;font-weight:700;color:var(--strong);letter-spacing:-.2px}
+  .body p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.5;min-height:38px}
+  .go{display:inline-flex;align-items:center;gap:6px;margin-top:11px;font-size:12.5px;font-weight:600;color:var(--navy)}
+  .card:hover .go{color:var(--orange)}.card:hover .go svg{transform:translateX(3px)}.go svg{transition:transform .16s}
+  .card.sogi .go{color:var(--sogi)}
+  .note{margin:8px 2px 0;font-size:12px;color:var(--muted2)}
+  @media(max-width:520px){.top{padding:22px 18px 88px}.stage{padding:0 16px 60px}}
 </style>
 </head>
 <body>
@@ -46,47 +52,77 @@
     <div class="wrap">
       <div class="crumbs"><a href="../index.html">LUMEN</a> <span>›</span> <span>Módulos</span></div>
       <h1>Módulos da plataforma</h1>
-      <p>Cada módulo é um container que se encaixa no LUMEN Core, com permissão e menu controlados pela plataforma. Abra um módulo para explorar suas telas.</p>
+      <p>Cada módulo é uma peça independente que se encaixa no LUMEN Core — a plataforma controla ordem, visibilidade e permissão (RBAC) de cada um. Vários módulos foram <b style="color:#fff">reutilizados do projeto SOGI</b>. Clique para abrir cada módulo ao vivo.</p>
+      <div class="stat">
+        <span class="pill"><b>22</b> módulos</span>
+        <span class="pill"><b>16</b> do Core</span>
+        <span class="pill" style="border-color:rgba(124,58,237,.5)"><b style="color:#c9b3ff">5</b> reutilizados do SOGI</span>
+        <span class="pill"><b>1</b> serviço externo</span>
+      </div>
     </div>
   </header>
 
-  <main class="stage">
-    <div class="grid">
+  <main class="stage" id="stage"></main>
 
-      <a class="card" href="sogi.html">
-        <div class="thumb">
-          <img src="img/sogi-projetos.png" alt="Módulo SOGI">
-          <span class="count">Contém 5 módulos</span>
-        </div>
-        <div class="body">
-          <div class="row"><h3>SOGI</h3><span class="seal mod">Módulo · Docker</span></div>
-          <p>Sistema Operacional de Gestão Interna. Container com os módulos migrados: Projetos, Chamados, Comunicação, Calendário e Gamificação.</p>
-          <span class="go">Ver módulos do SOGI <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </div>
-      </a>
+  <script>
+  const ARROW = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  // grupos de módulos. img relativo a modulos/; href relativo a modulos/.
+  const GROUPS = [
+    { title: 'Plataforma · Core', modules: [
+      {n:'Dashboard', img:'core-dashboard', d:'Visão consolidada: KPIs, gráficos, saúde dos módulos e atividade recente.', href:'../core/?r=dashboard', o:'core'},
+      {n:'Navegação & menu', img:'core-navegacao', d:'Admin da barra lateral: ocultar, reordenar, renomear e gate por perfil (RBAC), ao vivo.', href:'../core/?r=navegacao', o:'core'},
+      {n:'Integrações', img:'core-integracoes', d:'Conexões externas M2M: WhatsApp (Baileys), SMTP, ERPs — com teste de conexão e logs.', href:'../core/?r=integracoes', o:'core'},
+      {n:'Níveis de acesso', img:'core-acessos', d:'RBAC granular: permissões modulo.recurso.acao por perfil, com MFA nas ações críticas.', href:'../core/?r=acessos', o:'core'},
+      {n:'Usuários', img:'core-usuarios', d:'Ficha 360° do colaborador: cadastro, acesso, atuação, RH, competências e análise.', href:'../core/?r=usuarios', o:'core'},
+      {n:'Cadastros', img:'core-cadastros', d:'Dados-mestres: empresas (com mapa do Brasil e visão 360°), filiais e fornecedores.', href:'../core/?r=cadastros', o:'core'},
+      {n:'Saúde dos serviços', img:'core-servicos', d:'Monitor de containers Docker: status, latência e ações operacionais.', href:'../core/?r=servicos', o:'core'},
+      {n:'Configurações', img:'core-config', d:'Preferências da plataforma: tela de login, aparência e avisos & comunicados.', href:'../core/?r=config', o:'core'},
+      {n:'@lumen/ui', img:'core-ui', d:'Galeria do design system: componentes, padrões e tokens do LUMEN.', href:'../core/?r=ui', o:'core'},
+    ]},
+    { title: 'Negócio · Core', modules: [
+      {n:'Financeiro', img:'core-financeiro', d:'Indicadores financeiros e demonstrativo tipo DRE.', href:'../core/?r=financeiro', o:'core'},
+      {n:'Contratos', img:'core-contratos', d:'Gestão de contratos com drill-in e estados (carregando, vazio, erro, forbidden).', href:'../core/?r=contratos', o:'core'},
+      {n:'Documents', img:'core-documents', d:'Repositório de documentos com versão e permissão por documento.', href:'../core/?r=documents', o:'core'},
+      {n:'Licitações', img:'core-licitacoes', d:'Editais com status de match e acompanhamento.', href:'../core/?r=licitacoes', o:'core'},
+      {n:'Inventário', img:'core-inventario', d:'Ativos e patrimônio da operação.', href:'../core/?r=inventario', o:'core'},
+      {n:'Training / EAD', img:'core-training', d:'Trilhas de treinamento e capacitação da equipe.', href:'../core/?r=training', o:'core'},
+      {n:'Work Management', img:'core-work', d:'Kanban, checklists, time tracking, workload (Gantt) e automação.', href:'../core/?r=work', o:'core'},
+    ]},
+    { title: 'Reutilizados do SOGI', badge: '♻ do projeto SOGI', modules: [
+      {n:'Projetos', img:'sogi-projetos', d:'Portfólio de projetos com status, progresso e workspace por projeto.', href:'embed.html#projetos', o:'sogi'},
+      {n:'Chamados / Service Desk', img:'sogi-chamados', d:'Service desk: fila de atendimento, indicadores de SLA e base de conhecimento.', href:'embed.html#chamados', o:'sogi'},
+      {n:'Comunicação', img:'sogi-comunicacao', d:'Central de mensagens: caixa unificada, chat, e-mail e conversas por chamado.', href:'embed.html#comunicacao', o:'sogi'},
+      {n:'Calendário', img:'sogi-calendario', d:'Agenda de eventos, reuniões, entregas e manutenções.', href:'embed.html#calendario', o:'sogi'},
+      {n:'Gamificação', img:'sogi-gamificacao', d:'Engajamento: pontos por prazo, SLA, qualidade e colaboração; ranking.', href:'embed.html#gamificacao', o:'sogi'},
+    ]},
+    { title: 'Serviço externo', modules: [
+      {n:'NEXUS · HERMES', img:'core-nexus', d:'Serviço externo de IA: RAG, classificação e roteamento inteligente.', href:'../core/?r=nexus', o:'ext'},
+    ]},
+  ];
 
-      <a class="card" href="https://github.com/jeanpassos/frontend-lumen/tree/main/modules/_template/frontend-module">
-        <div class="ph">
-          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7l2 2h7v12a2 2 0 0 1-2 2H4z"/><path d="M9 13h6M12 10v6"/></svg>
-        </div>
-        <div class="body">
-          <div class="row"><h3>Template de módulo</h3><span class="seal src">Scaffold · fonte</span></div>
-          <p>Molde reutilizável (Next.js / TypeScript) com placeholders <span class="mono">{{moduleSlug}}</span> para criar novos módulos padronizados.</p>
-          <span class="go">Ver código-fonte <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </div>
-      </a>
-
-      <div class="card dashed">
-        <div class="ph">
-          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-        </div>
-        <div class="body">
-          <div class="row"><h3>Novos módulos</h3><span class="seal soon">Em breve</span></div>
-          <p>Financeiro, Contratos, Documents, Licitações e outros módulos do Core entram aqui conforme forem publicados.</p>
-        </div>
-      </div>
-
-    </div>
-  </main>
+  const OLABEL = {core:'Core', sogi:'Reutilizado do SOGI', ext:'Serviço externo'};
+  const stage = document.getElementById('stage');
+  GROUPS.forEach(g => {
+    const sec = document.createElement('div');
+    sec.className = 'sec';
+    sec.innerHTML = '<h2>'+g.title+'</h2>' + (g.badge?'<span class="badge">'+g.badge+'</span>':'') + '<span class="line"></span>';
+    stage.appendChild(sec);
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    g.modules.forEach(m => {
+      const a = document.createElement('a');
+      a.className = 'card' + (m.o==='sogi'?' sogi':'');
+      a.href = m.href;
+      if (m.href.startsWith('../core') || m.href.startsWith('embed')) { a.target = '_blank'; a.rel = 'noopener'; }
+      a.innerHTML =
+        '<div class="thumb"><span class="origin '+m.o+'">'+OLABEL[m.o]+'</span>'+
+          '<img loading="lazy" src="img/'+m.img+'.png" alt="Módulo '+m.n+'"></div>'+
+        '<div class="body"><h3>'+m.n+'</h3><p>'+m.d+'</p>'+
+          '<span class="go">Abrir módulo '+ARROW+'</span></div>';
+      grid.appendChild(a);
+    });
+    stage.appendChild(grid);
+  });
+  </script>
 </body>
 </html>
