@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUMEN — De sistemas isolados a uma só plataforma · Grupo ITS CS</title>
+<meta name="description" content="A história do LUMEN: da dor dos sistemas isolados a uma plataforma modular (Core + módulos).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#183c5a;--navy2:#0f2942;--orange:#E85928;--blue:#2f6fed;--sogi:#7c3aed;
+    --bg:#f0f2f5;--card:#fff;--border:#e3e7ec;--strong:#1f2937;--text:#374151;--muted:#6b7280;--muted2:#9aa6b4;
+    --danger:#c0413f;--ok:#1f9d57;
+  }
+  *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+  a{color:inherit;text-decoration:none}.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--orange);margin:0 0 14px}
+  h2{font-size:clamp(26px,4vw,42px);line-height:1.06;letter-spacing:-1px;font-weight:800;color:var(--strong);margin:0 0 16px}
+  .lead{font-size:clamp(15px,1.8vw,18px);color:var(--muted);max-width:62ch;margin:0}
+  section{padding:84px 0}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* progress bar */
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(to right,var(--orange),var(--blue));width:0;z-index:100;transition:width .1s linear}
+
+  /* HERO */
+  .hero{min-height:92vh;display:flex;align-items:center;background:radial-gradient(1200px 600px at 80% -10%,rgba(46,111,237,.22),transparent 55%),radial-gradient(900px 500px at 0% 110%,rgba(232,89,40,.16),transparent 55%),linear-gradient(160deg,var(--navy),var(--navy2));color:#eaf1f8;position:relative;overflow:hidden}
+  .hero .wrap{padding-top:60px;padding-bottom:80px}
+  .hbrand{display:flex;align-items:center;gap:12px;margin-bottom:38px}
+  .hlogo{width:40px;height:40px;border-radius:11px;background:var(--orange);display:grid;place-items:center;box-shadow:0 8px 22px rgba(232,89,40,.45)}
+  .hbrand b{color:#fff;font-weight:800;font-size:18px;letter-spacing:-.2px}
+  .hbrand span{color:#9db4cc;font-size:12.5px;display:block;margin-top:1px}
+  .hero h1{font-size:clamp(34px,6.2vw,68px);line-height:1.02;letter-spacing:-2px;font-weight:900;color:#fff;margin:0 0 22px;max-width:15ch}
+  .hero h1 em{font-style:normal;color:#ffb59b}
+  .hero p{font-size:clamp(16px,2vw,20px);color:#c6d5e6;max-width:56ch;margin:0 0 34px}
+  .scrollcue{display:inline-flex;align-items:center;gap:10px;color:#9db4cc;font-size:13px;font-weight:600}
+  .scrollcue .m{width:26px;height:40px;border:2px solid rgba(255,255,255,.3);border-radius:14px;position:relative}
+  .scrollcue .m::after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;background:#fff;border-radius:3px;transform:translateX(-50%);animation:wheel 1.6s infinite}
+  @keyframes wheel{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}60%{opacity:1;transform:translate(-50%,10px)}100%{opacity:0;transform:translate(-50%,10px)}}
+
+  /* generic split */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  @media(max-width:820px){.split{grid-template-columns:1fr;gap:32px}}
+
+  /* PAIN diagram */
+  .silos{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .silo{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;position:relative;box-shadow:0 6px 18px rgba(16,30,45,.05)}
+  .silo .nm{font-weight:700;color:#334155;font-size:14px;display:flex;align-items:center;gap:8px}
+  .silo .db{margin-top:12px;display:flex;align-items:center;gap:8px;color:var(--muted2);font-size:11.5px}
+  .silo .lock{position:absolute;top:14px;right:14px;color:#b9c3cf}
+  .silo::after{content:"×";position:absolute;font-size:22px;font-weight:800;color:#e3b3b1}
+  .silo:nth-child(1)::after{right:-16px;top:50%}
+  .silo:nth-child(2)::after{bottom:-20px;left:50%}
+  .silo:nth-child(3)::after{right:-16px;top:50%}
+  .painlist{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:12px}
+  .painlist li{display:flex;gap:12px;align-items:flex-start}
+  .painlist .x{flex:none;width:22px;height:22px;border-radius:7px;background:#fde9e9;color:var(--danger);display:grid;place-items:center;font-weight:800;font-size:13px;margin-top:1px}
+  .painlist b{color:var(--strong)}
+  .painlist small{color:var(--muted);display:block;font-size:13px}
+
+  /* SOLUTION diagram */
+  .coredia{background:linear-gradient(160deg,#1d4468,#0f2942);border-radius:20px;padding:30px;color:#eaf1f8;box-shadow:0 18px 44px rgba(16,30,45,.22)}
+  .corebox{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:16px 18px;text-align:center;margin-bottom:16px}
+  .corebox b{color:#fff;font-size:16px;font-weight:800;letter-spacing:-.2px}
+  .corebox .caps{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+  .cap{font-size:10.5px;font-weight:600;color:#cfe0f0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:4px 8px;border-radius:20px}
+  .plug{display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);margin:2px 0}
+  .mods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .modchip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:11px 8px;text-align:center;font-size:12px;font-weight:600;color:#dbe6f2}
+  .modchip span{display:block;font-size:10px;color:#8fa6bd;font-weight:500;margin-top:2px}
+  .keys{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:14px}
+  .keys li{display:flex;gap:12px;align-items:flex-start}
+  .keys .c{flex:none;width:24px;height:24px;border-radius:8px;background:#e6f6ed;color:var(--ok);display:grid;place-items:center;margin-top:1px}
+  .keys b{color:var(--strong)}.keys small{display:block;color:var(--muted);font-size:13px}
+
+  /* matriz */
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 26px}
+  .lg{font-size:12px;font-weight:700;padding:6px 12px;border-radius:20px}
+  .lg.f{background:#e9f1ff;color:var(--blue)}.lg.a{background:#e6f6ed;color:var(--ok)}.lg.m{background:#fdf2e0;color:#b06a00}.lg.c{background:#f3ecff;color:var(--sogi)}
+  .compgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .comp{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 6px 18px rgba(16,30,45,.05)}
+  .comp .h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .comp h4{margin:0;font-size:15.5px;color:var(--strong);font-weight:700}
+  .comp .from{font-size:12.5px;color:var(--muted);margin:0}
+  .comp .from b{color:#475569}
+
+  /* design tokens */
+  .swatches{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .sw{border-radius:12px;overflow:hidden;border:1px solid var(--border);width:96px}
+  .sw .c{height:56px}.sw .l{padding:7px 9px;font-size:10.5px;background:#fff}
+  .sw .l b{display:block;color:var(--strong);font-size:11.5px}.sw .l span{color:var(--muted2)}
+
+  /* architecture */
+  .arch{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .apiece{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 6px 18px rgba(16,30,45,.05)}
+  .apiece .tag{font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:3px 9px;border-radius:20px;display:inline-block;margin-bottom:10px}
+  .apiece.core .tag{background:#eaf0f6;color:var(--navy)}
+  .apiece.mod .tag{background:#e9f1ff;color:var(--blue)}
+  .apiece.ext .tag{background:#fdf2e0;color:#b06a00}
+  .apiece h4{margin:0 0 6px;font-size:15px;color:var(--strong)}
+  .apiece p{margin:0;font-size:13px;color:var(--muted)}
+
+  .btnrow{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:14px;padding:13px 22px;border-radius:26px;transition:transform .15s,box-shadow .15s}
+  .btn.primary{background:var(--orange);color:#fff;box-shadow:0 8px 22px rgba(232,89,40,.32)}
+  .btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--border)}
+  .btn:hover{transform:translateY(-2px)}
+  .linkmore{display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--navy);font-size:14px;margin-top:20px}
+  .linkmore:hover{color:var(--orange)}
+
+  /* conclusion */
+  .concl{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#eaf1f8;text-align:center}
+  .concl h2{color:#fff}
+  .bignum{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin:12px 0 8px}
+  .bignum .n{font-size:clamp(40px,8vw,80px);font-weight:900;letter-spacing:-3px;line-height:1}
+  .bignum .from{color:#8fa6bd}.bignum .to{color:#fff}
+  .bignum .arw{color:var(--orange)}
+  .foot{border-top:1px solid rgba(255,255,255,.1);margin-top:60px;padding-top:22px;font-size:12.5px;color:#8fa6bd}
+  .foot a{color:#c6d5e6;font-weight:600}
+</style>
+</head>
+<body>
+<div class="progress" id="pb"></div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hbrand">
+      <div class="hlogo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="4.2" fill="#fff"/></svg></div>
+      <div><b>LUMEN</b><span>Plataforma Modular · Grupo ITS CS</span></div>
+    </div>
+    <h1>Um sistema.<br>Não <em>vários</em> sistemas.</h1>
+    <p>A operação vive espalhada em sistemas que não se falam — cada um com seu login, suas permissões e o seu próprio banco. O LUMEN reúne tudo numa só plataforma. Veja como.</p>
+    <div class="scrollcue"><span class="m"></span> role para começar</div>
+  </div>
+</header>
+
+<!-- ACT 1 — A DOR -->
+<section>
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="eyebrow">O problema</p>
+      <h2>Cada sistema, uma ilha.</h2>
+      <p class="lead">Portal, SOGI, Operation Insights, Sankhya, planilhas. Ferramentas boas — mas isoladas. Cada uma resolve um pedaço e reinventa tudo de novo: autenticação, permissão, auditoria, interface e banco de dados.</p>
+      <ul class="painlist">
+        <li><span class="x">✕</span><div><b>Logins que não conversam</b><small>O usuário entra várias vezes; a TI mantém vários cadastros da mesma pessoa.</small></div></li>
+        <li><span class="x">✕</span><div><b>Permissões duplicadas</b><small>Cada sistema tem seu próprio jeito de dizer quem pode o quê — sem padrão.</small></div></li>
+        <li><span class="x">✕</span><div><b>Dados em silos</b><small>O mesmo cliente existe em 4 bancos, com 4 versões da verdade.</small></div></li>
+        <li><span class="x">✕</span><div><b>Integração no braço</b><small>Exporta, importa, copia e cola. Planilha vira cola entre sistemas.</small></div></li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <div class="silos">
+        <div class="silo"><div class="nm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg> Portal</div><div class="lock"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div class="db"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg> banco próprio</div></div>
+        <div class="silo"><div class="nm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg> SOGI</div><div class="lock"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div class="db"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg> banco próprio</div></div>
+        <div class="silo"><div class="nm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg> Sankhya</div><div class="lock"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div class="db"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg> banco próprio</div></div>
+        <div class="silo"><div class="nm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 9h18M3 15h18M9 3v18"/></svg> Planilhas</div><div class="lock"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div class="db"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/></svg> arquivo solto</div></div>
+      </div>
+      <p style="text-align:center;color:var(--danger);font-size:12.5px;margin-top:22px;font-weight:600">sem integração · sem fonte única de verdade</p>
+    </div>
+  </div>
+</section>
+
+<!-- ACT 2 — A VIRADA -->
+<section style="background:#fff">
+  <div class="wrap split">
+    <div class="reveal">
+      <div class="coredia">
+        <div class="corebox">
+          <b>LUMEN Core</b>
+          <div class="caps"><span class="cap">Identidade</span><span class="cap">RBAC granular</span><span class="cap">Multiempresa</span><span class="cap">Auditoria</span><span class="cap">Menu &amp; layout</span><span class="cap">Registry</span></div>
+        </div>
+        <div class="plug"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v6M8 9h8M8 9v4a4 4 0 0 0 8 0V9M12 17v4"/></svg></div>
+        <div class="mods">
+          <div class="modchip">Financeiro<span>Docker</span></div>
+          <div class="modchip">Contratos<span>Docker</span></div>
+          <div class="modchip">Service Desk<span>Docker</span></div>
+          <div class="modchip">Documents<span>Docker</span></div>
+          <div class="modchip">Cadastros<span>Docker</span></div>
+          <div class="modchip">Projetos<span>Docker</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <p class="eyebrow">A virada</p>
+      <h2>Um Core. Muitos módulos.</h2>
+      <p class="lead">O LUMEN inverte a lógica. Em vez de N sistemas isolados, uma plataforma: o <b>Core</b> cuida do que é comum a todos, e cada domínio vira um <b>módulo independente</b> que se encaixa nele.</p>
+      <ul class="keys">
+        <li><span class="c">✓</span><div><b>Identidade única e permissão central</b><small>Um login para tudo; RBAC granular no formato <span class="mono">modulo.recurso.acao</span>.</small></div></li>
+        <li><span class="c">✓</span><div><b>Multiempresa nativa</b><small>Dados particionados por empresa (<span class="mono">company_id</span>) — um ambiente, vários clientes.</small></div></li>
+        <li><span class="c">✓</span><div><b>Módulos plugáveis, banco isolado</b><small>Cada módulo tem seu Docker e seu banco — modularidade real, mas integrada pelo Core.</small></div></li>
+        <li><span class="c">✓</span><div><b>Uma linguagem visual só</b><small>Todos os módulos compartilham o mesmo design — parecem o mesmo produto.</small></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ACT 3 — COMPOSIÇÃO -->
+<section>
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Como se compõe</p>
+      <h2>Reaproveitar, não recomeçar.</h2>
+      <p class="lead">Nada de bom é jogado fora. A <b>Matriz de Composição de Domínio</b> define, módulo a módulo, o que vem de cada sistema maduro e como isso é <b>fundido</b> no padrão LUMEN — capacidade e regra, não cópia de código.</p>
+      <div class="legend">
+        <span class="lg f">fundir · de várias fontes</span>
+        <span class="lg a">adotar · capacidade e regra</span>
+        <span class="lg m">migrar · muda de camada</span>
+        <span class="lg c">consumir · fronteira externa</span>
+      </div>
+    </div>
+    <div class="compgrid">
+      <div class="comp reveal"><div class="h"><h4>Core Platform</h4><span class="lg f">fundir</span></div><p class="from"><b>Portal:</b> auth, RBAC granular, auditoria, multi-tenancy.<br><b>SOGI:</b> registry de módulos, matriz módulo×nível, MFA.</p></div>
+      <div class="comp reveal"><div class="h"><h4>Documents</h4><span class="lg f">fundir</span></div><p class="from"><b>Portal:</b> storage MinIO, anexos.<br><b>SOGI:</b> versão e permissão por documento.</p></div>
+      <div class="comp reveal"><div class="h"><h4>Financeiro</h4><span class="lg f">fundir</span></div><p class="from"><b>Portal:</b> DRE, workflow.<br><b>Operation Insights:</b> OBZ, EBITDA.<br><b>Sankhya:</b> origem ERP.</p></div>
+    </div>
+    <a class="linkmore" href="../extras/matriz-composicao-dominio.html" target="_blank" rel="noopener">Ver a matriz completa (14 módulos) <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+</section>
+
+<!-- ACT 4 — DESIGN KIT -->
+<section style="background:#fff">
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="eyebrow">Uma linguagem só</p>
+      <h2>ITS Design Kit.</h2>
+      <p class="lead">Todos os módulos falam a mesma língua visual. Tokens de cor, tipografia e componentes compartilhados garantem que o Financeiro e o Service Desk pareçam — e se comportem como — o mesmo produto.</p>
+      <a class="linkmore" href="../extras/its-design-kit.html" target="_blank" rel="noopener">Abrir o Design Kit <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="reveal">
+      <div class="swatches">
+        <div class="sw"><div class="c" style="background:#183c5a"></div><div class="l"><b>Navy</b><span class="mono">#183c5a</span></div></div>
+        <div class="sw"><div class="c" style="background:#E85928"></div><div class="l"><b>Orange</b><span class="mono">#E85928</span></div></div>
+        <div class="sw"><div class="c" style="background:#2f6fed"></div><div class="l"><b>Blue</b><span class="mono">#2f6fed</span></div></div>
+        <div class="sw"><div class="c" style="background:#1f9d57"></div><div class="l"><b>Success</b><span class="mono">#1f9d57</span></div></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span style="background:var(--orange);color:#fff;font-weight:700;font-size:13px;padding:10px 16px;border-radius:9px">Botão primário</span>
+        <span style="background:#fff;color:var(--navy);border:1px solid var(--border);font-weight:600;font-size:13px;padding:10px 16px;border-radius:9px">Secundário</span>
+        <span style="background:#e6f6ed;color:var(--ok);font-weight:700;font-size:12px;padding:6px 12px;border-radius:20px">Ativo</span>
+        <span style="background:#fde9e9;color:var(--danger);font-weight:700;font-size:12px;padding:6px 12px;border-radius:20px">Bloqueado</span>
+        <span class="mono" style="color:var(--muted);font-size:12.5px">Inter + JetBrains Mono</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACT 5 — ARQUITETURA -->
+<section>
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Por baixo</p>
+      <h2>Arquitetura Core + módulos.</h2>
+      <p class="lead">Não é monolito nem microserviço improvisado. É uma plataforma modular com contratos fortes: o Core dá a base, os módulos são autônomos e a IA/workflows entram como serviços externos.</p>
+    </div>
+    <div class="arch" style="margin-top:26px">
+      <div class="apiece core reveal"><span class="tag">Core</span><h4>LUMEN Core Platform</h4><p>Identidade, RBAC, multiempresa, registry de módulos, menu, layout, auditoria e governança.</p></div>
+      <div class="apiece mod reveal"><span class="tag">Módulo · Docker</span><h4>Módulos independentes</h4><p>Domínio autônomo: API própria, Git próprio, Docker próprio e banco isolado por módulo.</p></div>
+      <div class="apiece ext reveal"><span class="tag">Serviço externo</span><h4>NEXUS</h4><p>IA, RAG, memória, embeddings, classificação e Evidence Pack — consumido por evento.</p></div>
+      <div class="apiece ext reveal"><span class="tag">Serviço externo</span><h4>HERMES</h4><p>Workflows auditáveis: aprovações multi-etapa, timers, retry, compensação e DLQ.</p></div>
+    </div>
+    <a class="linkmore" href="https://github.com/jeanpassos/frontend-lumen/tree/main/docs" target="_blank" rel="noopener">Ver documentação &amp; arquitetura completa <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+</section>
+
+<!-- ACT 6 — MÓDULOS -->
+<section style="background:#fff">
+  <div class="wrap" style="text-align:center">
+    <div class="reveal">
+      <p class="eyebrow" style="justify-content:center">Na prática</p>
+      <h2>Os módulos.</h2>
+      <p class="lead" style="margin:0 auto">22 módulos já desenhados — e vários <b style="color:var(--sogi)">reutilizados do SOGI</b>. Cada um abre isolado; juntos, formam a plataforma.</p>
+      <div class="btnrow" style="justify-content:center">
+        <a class="btn primary" href="../modulos/">Explorar todos os módulos <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSÃO -->
+<section class="concl">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow" style="color:#ffb59b">A conclusão</p>
+      <div class="bignum">
+        <span class="n from">5+</span>
+        <span class="n arw">→</span>
+        <span class="n to">1</span>
+      </div>
+      <h2>De vários sistemas isolados<br>a uma só plataforma.</h2>
+      <p class="lead" style="color:#c6d5e6;margin:0 auto">Uma identidade. Uma permissão. Um design. Um lugar para tudo — com cada módulo mantendo a sua autonomia. Isso é o LUMEN.</p>
+      <div class="btnrow" style="justify-content:center">
+        <a class="btn primary" href="../modulos/">Ver os módulos</a>
+        <a class="btn ghost" href="../core/" target="_blank" rel="noopener">Acessar o sistema</a>
+      </div>
+      <div class="foot">Protótipo de alta fidelidade · Grupo ITS CS · <a href="https://github.com/jeanpassos/frontend-lumen">github.com/jeanpassos/frontend-lumen</a></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // reveal on scroll
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  // progress bar
+  var pb = document.getElementById('pb');
+  addEventListener('scroll', function(){
+    var h = document.documentElement;
+    var p = h.scrollTop / (h.scrollHeight - h.clientHeight);
+    pb.style.width = (p*100) + '%';
+  }, {passive:true});
+</script>
+</body>
+</html>
