@@ -16,6 +16,9 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Estado do sync (hash do último design baixado)
+.sync/
+
 # Temporários
 *.log
 *.tmp
