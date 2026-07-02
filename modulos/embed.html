@@ -53,6 +53,9 @@ function EmbedApp(){
   React.useEffect(() => {
     window.SOGI_NEW_TASK = () => setNewTaskOpen(true);
     window.SOGI_OPEN_TASK = () => setTaskOpen(true);
+    // Comunicação (e-mail): a coluna de conteúdo é transparente e mostrava o cinza do fundo.
+    // Fundo branco aqui faz o painel de e-mail parecer um painel de leitura limpo.
+    if (screen === 'comunicacao') { document.body.style.background = '#fff'; document.documentElement.style.background = '#fff'; }
   }, []);
   let content = null;
   if (screen === 'comunicacao') content = <ChatScreen onNavigate={() => {}} />;
