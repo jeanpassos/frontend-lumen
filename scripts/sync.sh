@@ -62,6 +62,9 @@ cp -r "$SRC/screenshots"                   "$ROOT/core/screenshots"
 # patch: deep-link do Core por ?r=<rota> — abre direto num módulo (pula o login).
 # usado pela galeria em modulos/. Reaplicado a cada sync porque o Core é regenerado do design.
 sed -i "s/route:'login', company:0,/route:(new URLSearchParams(location.search).get('r')||'login'), company:0,/" "$ROOT/core/index.html"
+# patch: os iframes dos módulos SOGI apontam p/ 'sogi/host.html' (estrutura antiga do design).
+# no monorepo o SOGI vive em ../modules/sogi e o host completo é modulos/embed.html (#hash).
+sed -i 's|src="sogi/host.html?screen=|src="../modulos/embed.html#|g' "$ROOT/core/index.html"
 
 # --- modules/sogi ---
 mkdir -p "$ROOT/modules/sogi"
