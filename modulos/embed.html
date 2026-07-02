@@ -68,7 +68,7 @@ function EmbedApp(){
   else if (screen === 'feed') content = <FeedScreen onNavigate={() => {}} />;
   else content = <div style={{padding:40,font:'500 15px Inter,system-ui',color:'#64748b'}}>Módulo "{screen}" não disponível neste embed.</div>;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', background: 'var(--bg)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', background: screen === 'comunicacao' ? '#fff' : 'var(--bg)' }}>
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, minHeight: 0 }}>{content}</main>
       {taskOpen && typeof TaskDrawer !== 'undefined' && <TaskDrawer onClose={() => setTaskOpen(false)} />}
       {newTaskOpen && typeof NewTaskModal !== 'undefined' && <NewTaskModal onClose={() => setNewTaskOpen(false)} onCreate={(t) => { try { SOGI_DATA.myTasks.unshift(t); } catch (e) {} }} />}
